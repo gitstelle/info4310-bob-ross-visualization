@@ -23,6 +23,11 @@
 .icons {
     display: flex;
     flex-wrap: wrap;
+    
+}
+
+.icons>* {
+    flex-shrink: 3;
 }
 
 .icon:hover {
