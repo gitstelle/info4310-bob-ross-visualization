@@ -9,7 +9,7 @@
     <script src="https://d3js.org/topojson.v3.min.js"></script>
 </body>
 
-<div class="icons" width=1000>
+<div class="icons">
     <!-- <img class="evergreen_icon" src="icons/icons8-evergreen-100.png" width="100" height="100"> -->
 </div>
 
@@ -67,8 +67,8 @@
     console.log(f1Buttons)
 
     f1Buttons.append('img')
-        .attr('width', 100)
-        .attr('height', 100)
+        .attr('width', 70)
+        .attr('height', 70)
         .attr("src", d=>d.h2)
 
     function iconClicked(event) {

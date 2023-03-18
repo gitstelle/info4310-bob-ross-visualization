@@ -21,13 +21,13 @@
 }
 
 .icons {
+    width: 1000px;
     display: flex;
     flex-wrap: wrap;
-    
 }
 
 .icons>* {
-    flex-shrink: 3;
+    flex-shrink: 1;
 }
 
 .icon:hover {
