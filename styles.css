@@ -19,3 +19,13 @@
     max-width: 40%;
 
 }
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: flex;
+}
+
+.icon:hover {
+    cursor: pointer;
+}
