@@ -22,8 +22,7 @@
 
 .icons {
     display: flex;
-    flex-direction: row;
-    flex-wrap: flex;
+    flex-wrap: wrap;
 }
 
 .icon:hover {
