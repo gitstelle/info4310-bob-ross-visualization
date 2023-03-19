@@ -78,9 +78,18 @@
                     .attr("y", 0)
                     .attr("height", canvasHeight)
                     .attr("width", canvasWidth)
+                    .style("stroke", "#570A0C")
+                    .style("fill", "none")
+                    .style("stroke-width", 30);
+                var borderPath2 = canvas.append("rect")
+                    .attr("class", "frame")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("height", canvasHeight)
+                    .attr("width", canvasWidth)
                     .style("stroke", "gold")
                     .style("fill", "none")
-                    .style("stroke-width", 10);
+                    .style("stroke-width", 20);
 
             }
             else {
