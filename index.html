@@ -1,13 +1,13 @@
 <html>
 
 <head>
-</head>
-
-<body>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
-</body>
+</head>
+
+<body>
+    <h1>Make a "happy little accident" with Bob Ross!</h1>
 
 <div class="icons">
     <!-- <img class="evergreen_icon" src="icons/icons8-evergreen-100.png" width="100" height="100"> -->
@@ -16,15 +16,15 @@
 <div class="container">
     <div class="left">
         <div class="canvas">
-            <h1>Canvas</h1>
-            <svg id="canvas" width=1200 height=700></svg>
+            <h2>Canvas</h2>
+            <svg id="canvas" width=1000 height=700></svg>
         </div>
     </div>
 
 
 
     <div class="right">
-        <h1> Tutorials Container</h1>
+        <h2> Tutorials Container</h2>
         <div class="tutorials">
             <table id="episode-table">
                 <thead>
@@ -40,7 +40,7 @@
     </div>
 
 </div>
-
+</body>
 
 <script>
     const getData = async function () {
@@ -75,9 +75,11 @@
         console.log(f1Buttons)
 
         f1Buttons.append('img')
-            .attr('width', 70)
-            .attr('height', 70)
+            .attr('width', 50)
+            .attr('height', 50)
             .attr("src", d => d.h2)
+        
+        f1Buttons.append('h4').text(d  => d.label);
 
         function iconClicked(event) {
             console.log('triggered')
