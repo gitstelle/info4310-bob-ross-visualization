@@ -7,26 +7,29 @@
 </head>
 
 <body>
-    <h1>Make a "happy little accident" with Bob Ross!</h1>
+    <h1>The Works of Bob Ross</h1>
+    <p id = quote><q>We don't make mistakes, just happy little accidents.</q></p>
 
-<div class="icons">
-    <!-- <img class="evergreen_icon" src="icons/icons8-evergreen-100.png" width="100" height="100"> -->
-</div>
 
-<!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
-<div class="frame_toggle">
-    <h3> Frame </h3>
-    <label class="switch">
-        <input type="checkbox" id="toggle" value="true" name="toggles">
-        <span class="slider round">
-        </span>
-    </label>
-</div>
 
 <div class="container">
+    
     <div class="left">
+        <div class="icons">
+            <!-- <img class="evergreen_icon" src="icons/icons8-evergreen-100.png" width="100" height="100"> -->
+        </div>
+        
+        <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
+        <div class="frame_toggle">
+            <h4> frame your work? </h4>
+            <label class="switch">
+                <input type="checkbox" id="toggle" value="true" name="toggles">
+                <span class="slider round">
+                </span>
+            </label>
+        </div>
         <div class="canvas">
-            <h2>Canvas</h2>
+            <!-- <h2>Canvas</h2> -->
             <svg id="canvas" width=1000 height=700></svg>
         </div>
     </div>
@@ -113,8 +116,8 @@
         console.log(f1Buttons)
 
         f1Buttons.append('img')
-            .attr('width', 50)
-            .attr('height', 50)
+            .attr('width', 40)
+            .attr('height', 40)
             .attr("src", d => d.h2)
         
         f1Buttons.append('h4').text(d  => d.label);
@@ -213,9 +216,3 @@
 
 
 </html>
-Footer
-© 2023 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security

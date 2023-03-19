@@ -1,17 +1,31 @@
 html {
     font-family: 'Trebuchet MS', Arial, sans-serif;
+
 }
 
 body {
     margin-top: 2%;
     margin-bottom: 2%;
     margin-right: 5%;
-    margin-left: 5%
+    margin-left: 5%;
+    background-color: #04a7de;
+    color:white;
+    cursor: url("paint-brush.png"), auto;
 }
 
+#canvas {
+  background-color: white;
+}
+/* 
 h1 {
     text-align: center;
+} */
+
+#quote {
+  font-style: italic;
+  margin-bottom:20px;
 }
+
 
 .container {
     display: flex;
@@ -36,13 +50,26 @@ h1 {
 }
 
 .icons {
-    width: 1000px;
+    width: 800px;
     display: flex;
     flex-wrap: wrap;
+    /* margin-right: auto; */
+    margin-left: 120px;
+    justify-content: center;
+    
 }
 
 .frame_toggle {
-    width:1200px;
+    width:210px;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.frame_toggle h4{
+  text-align: center;
+  margin-right: 10px;
 }
 
 .icons>* {
@@ -54,15 +81,28 @@ h1 {
 }
 
 .icons button {
-    margin:5px;
+    /* margin:5px; */
     width:70px;
     height:70px;
+    margin:2px;
+    border: 2px solid black;
+    border-radius: 10%;
+    background-color: white;
+    /* color:white; */
+    cursor: url("paint-brush.png"), auto;
+
+}
+
+.icons button:hover {
+  background-color: #fcf8cc;
 }
 
 .icons h4 {
     margin:0;
     font-weight: normal;
     font-family: 'Trebuchet MS';
+    font-size: 14px;
+    text-align: center;
 }
 
 
@@ -94,6 +134,8 @@ h1 {
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
+    cursor: url("paint-brush.png"), auto;
+
   }
   
   .slider:before {
@@ -109,11 +151,11 @@ h1 {
   }
   
   input:checked + .slider {
-    background-color: #2196F3;
+    background-color: gold;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px gold;
   }
   
   input:checked + .slider:before {
