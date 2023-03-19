@@ -34,8 +34,6 @@
         </div>
     </div>
 
-
-
         <div class="right">
             <div class = "tutorials_head">
                 <span class = "percentage"></span> <span style="font-size: 20px;">Tutorials</span>
@@ -138,6 +136,8 @@
             console.log('triggered')
             console.log('iconClicked2')
             console.log(d3.select(this).datum().label)
+            button = d3.select(this)
+            button.style('background-color','#fcf8cc')
 
             buttonClicked = d3.select(this).datum().label;
             selectedLabels.push(buttonClicked);
