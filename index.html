@@ -36,23 +36,24 @@
 
 
 
-    <div class="right">
-        <h2> Tutorials Container</h2>
-        <div class="tutorials">
-            <table id="episode-table">
-                <thead>
-                    <!-- <th style="width: 170px">Episode</th> -->
-                    <th style="width: 170px">Title</th>
-                    <th></th>
-                    <th>Episode</th>
-                    <th></th>
-                    <th>Element</th>
-                </thead>
-            </table>
+        <div class="right">
+            <div class = "tutorials_head">
+                <span class = "percentage"></span> <span style="font-size: 20px;">Tutorials</span>
+    
+            </div>
+            <div class="tutorials">
+                <div class = "elements" id = "elements"></div>
+                <table id="episode-table">
+                    <thead>
+                        <!-- <th style="width: 170px">Episode</th> -->
+                        <th id = "column">Title</th>
+                        <th id = "column">Episode</th>
+                    </thead>
+                </table>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </body>
 
 <script>
@@ -69,6 +70,8 @@
         const canvasHeight = canvas.attr("height")
         const canvasWidth = canvas.attr("width")
 
+        var selectedLabels = [];
+
 
         d3.select('.switch').on("change", function () {
             selected = d3.select("#toggle")._groups[0][0].checked;
@@ -81,9 +84,18 @@
                     .attr("y", 0)
                     .attr("height", canvasHeight)
                     .attr("width", canvasWidth)
+                    .style("stroke", "#570A0C")
+                    .style("fill", "none")
+                    .style("stroke-width", 30);
+                var borderPath2 = canvas.append("rect")
+                    .attr("class", "frame")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("height", canvasHeight)
+                    .attr("width", canvasWidth)
                     .style("stroke", "gold")
                     .style("fill", "none")
-                    .style("stroke-width", 10);
+                    .style("stroke-width", 20);
 
             }
             else {
@@ -110,7 +122,7 @@
 
         console.log(f1ButtonsData)
         const f1div = d3.select('.icons')
-        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').on('click', iconClicked(event));
+        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').on('click', iconClicked);
 
 
         console.log(f1Buttons)
@@ -119,26 +131,33 @@
             .attr('width', 40)
             .attr('height', 40)
             .attr("src", d => d.h2)
-        
-        f1Buttons.append('h4').text(d  => d.label);
 
-        function iconClicked(event) {
+        f1Buttons.append('h4').text(d => d.label);
+
+        function iconClicked() {
             console.log('triggered')
             console.log('iconClicked2')
-            console.log(d3.select(this))
+            console.log(d3.select(this).datum().label)
+
+            buttonClicked = d3.select(this).datum().label;
+            selectedLabels.push(buttonClicked);
+
+            console.log('selectedLabels');
+            console.log(selectedLabels);
 
 
-            drawIcon(event);
-            // updateTable(event);
+
+            drawIcon();
+            updateTable(selectedLabels);
         }
 
 
 
 
-        function drawIcon(event) {
+        function drawIcon() {
             //should this function filter out the original dataset to just include the rows with that element?
-            console.log('triggered');
-            console.log(d3.select(this));
+            console.log('drawIcon');
+            // console.log(d3.select(this));
         }
 
 
@@ -147,66 +166,76 @@
         // updateTable( data )
 
         // Update data table with new rows and cells
-        const colorTable = d3.select("table#episode-table");
+        const episodeTable = d3.select("table#episode-table");
 
-        function updateTable() {
+        function updateTable(selectedLabels) {
+            console.log('updateTable')
 
-            data = d3.select(this).datum()
+            episodeTable.selectAll("td").remove();
+            episodeTable.selectAll(".row").remove();
+            d3.select(".element_list").remove();
+            d3.select(".percentage text").remove();
+            // d3.select(".tutorials_percent").remove();
+
+            //buttonClicked is the icon that the user has selected
+            //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
+            filteredData = Array.from(bob_ross)
+            elementsText = "";
+            selectedLabels.forEach((i)=>{
+                console.log(i);
+                filteredData = filteredData.filter(d => d[i] == 1)
+                label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
+
+                elementsText = elementsText + " "+ label + ","
+
+
+            })
+
+
+            percentage = ((filteredData.length/bob_ross.length) * 100).toFixed(2) + '%';
+
+            console.log(Number(filteredData.length/bob_ross.length).toFixed(2));
+
+            d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+
+
+            // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+
+
+
+
+            console.log('filteredData')
+            console.log(filteredData);
+
+            console.log('elementsText')
+            console.log(elementsText)
+
+
+
+            d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:"+elementsText.slice(0, -1));
+
             // First make table rows for each point using a data join 
-            var tableRows = colorTable.selectAll("tr.row").data(data)
+            var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
                 .join(enter => {
                     // In the enter part, we add a <tr> and then three <td>
                     let newRows = enter.append("tr").attr("class", "row")
 
-                    newRows.append("td").text(d => d.TITLE);
-                    newRows.append("td").text(d => d.EPISODE);
-                    //need a column for the element?
-                    newRows.append("td").text(d => d.element)
-                    // newRows.append("td").text("\u2588").style("color", d => d.colorValue)
-                    // newRows.append("td").text(d => d.colorValue);
+                    newRows.append("td").text(d => d.title);
+                    newRows.append("td").text(d => d.episode);
+                }
+                    // update => {
+                    //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
+                    //     // Then repopulate them all over again
+                    //     // update.selectAll("td").remove()
 
-                    // Configure group mouseovers using .filter
-                    // We do this in enter so that each row only gets one mouseover event
-                    // Because our functions use d, if a row gets new data it is no problem
+                    //     update.append("td").text(d => d.title);
+                    //     update.append("td").text(d => d.episode);
+                    //     //need a column for the element?
+                    //     update.append("td").text(buttonClicked)
 
-                    // For all of the rows, when you mouseover one...
-                    newRows.on("mouseover", function (event, d) {
-                        // Select all circles, then filter them based on whether
-                        //  their colorName matches the row's colorName
-                        // Since both rows and circles were made with data joins, we can
-                        //  easily compare them using .filter
-                        // Here d is the row's data object and cd is the circle's data object
-                        // Note that to select one circle we could use cd.id === d.id
-                        circleChart.selectAll("circle.point")
-                            .filter(cd => cd.colorName === d.colorName)
-                            .classed("highlighted", true) // CSS to handle highlighting
-                            .raise();  // make sure they are on top
-
-                        // Do the same thing with the rows now,
-                        // d is mouseover row's data object, rd is another row's data object
-                        colorTable.selectAll("tr.row")
-                            .filter(rd => rd.colorName === d.colorName)
-                            .classed("highlighted", true); // CSS to handle highlighting
-                    })
-                    newRows.on("mouseout", function (event, d) {
-                        // Clear on mouseout
-                        circleChart.selectAll("circle.point")
-                            .classed("highlighted", false);
-
-                        colorTable.selectAll("tr.row")
-                            .classed("highlighted", false);
-                    })
-                },
-                    update => {
-                        // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
-                        // Then repopulate them all over again
-                        update.selectAll("td").remove()
-
-                        update.append("td").text(d => d.colorName);
-                        update.append("td").text("\u2588").style("color", d => d.colorValue)
-                        update.append("td").text(d => d.colorValue);
-
-                    })
+                    // }
+                    )
+                    console.log(tableRows)
         }
     }
 
