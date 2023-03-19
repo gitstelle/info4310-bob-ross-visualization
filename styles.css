@@ -54,7 +54,7 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     /* margin-right: auto; */
-    margin-left: 120px;
+    margin-left: 10%;
     justify-content: center;
     
 }
