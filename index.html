@@ -43,120 +43,131 @@
 
 
 <script>
+    const getData = async function () {
 
-    let f1ButtonsData = [];
-    f1Label = ['tree', 'clouds', 'mountain', 'grass', 'lake', 'river', 'bushes', 'building', 'rocks', 'sun', 'waterfall', 'snow', 'path',
-                'ocean', 'beach', 'fence', 'fog', 'night', 'flowers', 'bridge'];
-    f1H2 = ["icons/tree.svg","icons/clouds.svg","icons/mountain.svg","icons/grass.svg","icons/lake.svg", "icons/river.svg","icons/bushes.svg","icons/building.svg",
-            "icons/rocks.svg","icons/sun.svg","icons/waterfall.svg","icons/snow.svg","icons/path.svg","icons/ocean.svg","icons/beach.svg",
-            "icons/fence.svg", "icons/fog.svg", "icons/night.svg", "icons/flowers.svg","icons/bridge.svg"]
-    // f1H3 = ['Markets', 'Cafes & Bakeries', 'Desserts & Drinks', 'Restaurant'] //h3 labels
+        let bob_ross = await d3.csv("bob_ross.csv", d3.autotype);
+        let bob_ross_counts = await d3.csv("bob_ross_counts.csv", d3.autotype);
 
-    for (let i = 0; i < f1Label.length; i++) {
-        dict = { label: f1Label[i], h2: f1H2[i] };
+        console.log(bob_ross);
+        console.log(bob_ross_counts);
 
-        // dict = { label: f1Label[i], h2: f1H2[i], h3: f1H3[i]};
-        f1ButtonsData.push(dict);
+
+        let f1ButtonsData = [];
+        f1Label = ['tree', 'clouds', 'mountain', 'grass', 'lake', 'river', 'bushes', 'building', 'rocks', 'sun', 'waterfall', 'snow', 'path',
+            'ocean', 'beach', 'fence', 'fog', 'night', 'flowers', 'bridge'];
+        f1H2 = ["icons/tree.svg", "icons/clouds.svg", "icons/mountain.svg", "icons/grass.svg", "icons/lake.svg", "icons/river.svg", "icons/bushes.svg", "icons/building.svg",
+            "icons/rocks.svg", "icons/sun.svg", "icons/waterfall.svg", "icons/snow.svg", "icons/path.svg", "icons/ocean.svg", "icons/beach.svg",
+            "icons/fence.svg", "icons/fog.svg", "icons/night.svg", "icons/flowers.svg", "icons/bridge.svg"]
+        // f1H3 = ['Markets', 'Cafes & Bakeries', 'Desserts & Drinks', 'Restaurant'] //h3 labels
+
+        for (let i = 0; i < f1Label.length; i++) {
+            dict = { label: f1Label[i], h2: f1H2[i] };
+
+            // dict = { label: f1Label[i], h2: f1H2[i], h3: f1H3[i]};
+            f1ButtonsData.push(dict);
+        }
+
+        console.log(f1ButtonsData)
+        const f1div = d3.select('.icons')
+        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').on('click', iconClicked(event));
+
+
+        console.log(f1Buttons)
+
+        f1Buttons.append('img')
+            .attr('width', 70)
+            .attr('height', 70)
+            .attr("src", d => d.h2)
+
+        function iconClicked(event) {
+            console.log('triggered')
+            console.log('iconClicked2')
+            console.log(d3.select(this))
+
+
+            drawIcon(event);
+            // updateTable(event);
+        }
+
+
+
+
+        function drawIcon(event) {
+            //should this function filter out the original dataset to just include the rows with that element?
+            console.log('triggered');
+            console.log(d3.select(this));
+        }
+
+
+
+        // Populate the data table
+        // updateTable( data )
+
+        // Update data table with new rows and cells
+        const colorTable = d3.select("table#episode-table");
+
+        function updateTable() {
+
+            data = d3.select(this).datum()
+            // First make table rows for each point using a data join 
+            var tableRows = colorTable.selectAll("tr.row").data(data)
+                .join(enter => {
+                    // In the enter part, we add a <tr> and then three <td>
+                    let newRows = enter.append("tr").attr("class", "row")
+
+                    newRows.append("td").text(d => d.TITLE);
+                    newRows.append("td").text(d => d.EPISODE);
+                    //need a column for the element?
+                    newRows.append("td").text(d => d.element)
+                    // newRows.append("td").text("\u2588").style("color", d => d.colorValue)
+                    // newRows.append("td").text(d => d.colorValue);
+
+                    // Configure group mouseovers using .filter
+                    // We do this in enter so that each row only gets one mouseover event
+                    // Because our functions use d, if a row gets new data it is no problem
+
+                    // For all of the rows, when you mouseover one...
+                    newRows.on("mouseover", function (event, d) {
+                        // Select all circles, then filter them based on whether
+                        //  their colorName matches the row's colorName
+                        // Since both rows and circles were made with data joins, we can
+                        //  easily compare them using .filter
+                        // Here d is the row's data object and cd is the circle's data object
+                        // Note that to select one circle we could use cd.id === d.id
+                        circleChart.selectAll("circle.point")
+                            .filter(cd => cd.colorName === d.colorName)
+                            .classed("highlighted", true) // CSS to handle highlighting
+                            .raise();  // make sure they are on top
+
+                        // Do the same thing with the rows now,
+                        // d is mouseover row's data object, rd is another row's data object
+                        colorTable.selectAll("tr.row")
+                            .filter(rd => rd.colorName === d.colorName)
+                            .classed("highlighted", true); // CSS to handle highlighting
+                    })
+                    newRows.on("mouseout", function (event, d) {
+                        // Clear on mouseout
+                        circleChart.selectAll("circle.point")
+                            .classed("highlighted", false);
+
+                        colorTable.selectAll("tr.row")
+                            .classed("highlighted", false);
+                    })
+                },
+                    update => {
+                        // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
+                        // Then repopulate them all over again
+                        update.selectAll("td").remove()
+
+                        update.append("td").text(d => d.colorName);
+                        update.append("td").text("\u2588").style("color", d => d.colorValue)
+                        update.append("td").text(d => d.colorValue);
+
+                    })
+        }
     }
 
-    console.log(f1ButtonsData)
-    const f1div = d3.select('.icons')
-    f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').on('click', iconClicked(event));
-                    
-
-    console.log(f1Buttons)
-
-    f1Buttons.append('img')
-        .attr('width', 70)
-        .attr('height', 70)
-        .attr("src", d=>d.h2)
-
-    function iconClicked(event) {
-        console.log('triggered')
-        console.log('iconClicked2')
-        console.log(d3.select(this))
-
-
-        drawIcon(event);
-        // updateTable(event);
-    }
-
-
-
-
-    function drawIcon(event) {
-        //should this function filter out the original dataset to just include the rows with that element?
-        console.log('triggered');
-        console.log(d3.select(this));
-    }
-
-
-
-    // Populate the data table
-    // updateTable( data )
-
-    // Update data table with new rows and cells
-    const colorTable = d3.select("table#episode-table");
-
-    function updateTable() {
-
-        data = d3.select(this).datum()
-        // First make table rows for each point using a data join 
-        var tableRows = colorTable.selectAll("tr.row").data(data)
-            .join(enter => {
-                // In the enter part, we add a <tr> and then three <td>
-                let newRows = enter.append("tr").attr("class", "row")
-
-                newRows.append("td").text(d => d.TITLE);
-                newRows.append("td").text(d => d.EPISODE);
-                //need a column for the element?
-                newRows.append("td").text(d => d.element)
-                // newRows.append("td").text("\u2588").style("color", d => d.colorValue)
-                // newRows.append("td").text(d => d.colorValue);
-
-                // Configure group mouseovers using .filter
-                // We do this in enter so that each row only gets one mouseover event
-                // Because our functions use d, if a row gets new data it is no problem
-
-                // For all of the rows, when you mouseover one...
-                newRows.on("mouseover", function (event, d) {
-                    // Select all circles, then filter them based on whether
-                    //  their colorName matches the row's colorName
-                    // Since both rows and circles were made with data joins, we can
-                    //  easily compare them using .filter
-                    // Here d is the row's data object and cd is the circle's data object
-                    // Note that to select one circle we could use cd.id === d.id
-                    circleChart.selectAll("circle.point")
-                        .filter(cd => cd.colorName === d.colorName)
-                        .classed("highlighted", true) // CSS to handle highlighting
-                        .raise();  // make sure they are on top
-
-                    // Do the same thing with the rows now,
-                    // d is mouseover row's data object, rd is another row's data object
-                    colorTable.selectAll("tr.row")
-                        .filter(rd => rd.colorName === d.colorName)
-                        .classed("highlighted", true); // CSS to handle highlighting
-                })
-                newRows.on("mouseout", function (event, d) {
-                    // Clear on mouseout
-                    circleChart.selectAll("circle.point")
-                        .classed("highlighted", false);
-
-                    colorTable.selectAll("tr.row")
-                        .classed("highlighted", false);
-                })
-            },
-                update => {
-                    // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
-                    // Then repopulate them all over again
-                    update.selectAll("td").remove()
-
-                    update.append("td").text(d => d.colorName);
-                    update.append("td").text("\u2588").style("color", d => d.colorValue)
-                    update.append("td").text(d => d.colorValue);
-
-                })
-    }
+    getData();
 
 </script>
 
