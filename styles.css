@@ -54,7 +54,7 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     /* margin-right: auto; */
-    margin-left: 120px;
+    margin-left: 10%;
     justify-content: center;
     
 }
@@ -171,4 +171,19 @@ h1 {
   
   .slider.round:before {
     border-radius: 50%;
+  }
+
+  .table_cell {
+    display:flex;
+    flex-direction: column;
+  }
+
+  .cell_image {
+    max-width:100%;
+    height:auto;
+  }
+
+  .tutorials {
+    overflow-y:auto;
+    height:700px;
   }

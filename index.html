@@ -34,20 +34,18 @@
             </div>
         </div>
 
-
-
         <div class="right">
             <div class="tutorials_head">
                 <span class="percentage"></span> <span style="font-size: 20px;">Tutorials</span>
 
             </div>
+            <div class="elements" id="elements"></div>
             <div class="tutorials">
-                <div class="elements" id="elements"></div>
                 <table id="episode-table">
                     <thead>
                         <!-- <th style="width: 170px">Episode</th> -->
-                        <th id="column">Title</th>
-                        <th id="column">Episode</th>
+                        <th id="column"></th>
+                        <!-- <th id="column">Episode</th> -->
                     </thead>
                 </table>
             </div>
@@ -150,6 +148,8 @@
             console.log('triggered')
             console.log('iconClicked2')
             console.log(d3.select(this).datum().label)
+            button = d3.select(this)
+            button.style('background-color','#fcf8cc')
 
             buttonClicked = d3.select(this).datum().label;
             selectedLabels.push(buttonClicked);
@@ -231,9 +231,22 @@
                 .join(enter => {
                     // In the enter part, we add a <tr> and then three <td>
                     let newRows = enter.append("tr").attr("class", "row")
-                    c
-                    newRows.append("td").text(d => d.title);
-                    newRows.append("td").text(d => d.episode);
+
+                    // newRows.append("td").text(d => d.title);
+                    // newRows.append("td").text(d => d.episode);
+
+                    cell = newRows.append("td").append("div").attr("class", "table_cell")
+
+                    cell.append("img")
+                        .attr("class", "cell_image")
+                        .attr("src", d => 'paintings/'+d.episode+'.jpg');
+
+                    cell.append("text")
+                        .text(d=>"Title: " + d.title)
+                    
+                    cell.append("text")
+                        .text(d=>"Episode: " + d.episode)
+
                 }
                     // update => {
                     //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
