@@ -71,6 +71,61 @@
 
         var selectedLabels = [];
 
+        canvas.append("svg:image")
+            .attr("width", 500)
+            .attr("height", 800)
+            .attr("xlink:href", "canvas/grassymountains.png")
+
+
+            canvas.append("svg:image")
+            .attr("width", 200)
+            .attr("height", 600)
+            .attr("xlink:href", "canvas/tree.png")
+
+
+            canvas.append("svg:image")
+            .attr("x", 500)
+            .attr("y", 0)
+            .attr("width", 600)
+            .attr("height", 400)
+            .attr("xlink:href", "canvas/fog.png")
+            canvas.append("svg:image")
+            .attr("x", 200)
+            .attr("y", 0)
+            .attr("width", 600)
+            .attr("height", 400)
+            .attr("xlink:href", "canvas/fog.png")
+            canvas.append("svg:image")
+            .attr("x", 150)
+            .attr("y", 150)
+            .attr("width", 400)
+            .attr("height", 200)
+            .attr("xlink:href", "canvas/fog.png")
+            canvas.append("svg:image")
+            .attr("x", 500)
+            .attr("y", 120)
+            .attr("width", 400)
+            .attr("height", 200)
+            .attr("xlink:href", "canvas/fog.png")
+
+            canvas.append("svg:image")
+            .attr("x", 500)
+            .attr("y", 500)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/bush.png")
+
+
+        
+    
+
+            canvas.append("svg:image")
+            .attr("x", 650)
+            .attr("y", 500)
+            .attr("width", 70)
+            .attr("xlink:href", "canvas/flower.png")
+
+     
+
 
         d3.select('.switch').on("change", function () {
             selected = d3.select("#toggle")._groups[0][0].checked;
