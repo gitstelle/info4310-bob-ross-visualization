@@ -137,119 +137,133 @@
             console.log('iconClicked2')
             console.log(d3.select(this).datum().label)
             button = d3.select(this)
-            button.style('background-color','#fcf8cc')
+            button.style('background-color', '#fcf8cc')
 
+            // label
             buttonClicked = d3.select(this).datum().label;
-            selectedLabels.push(buttonClicked);
+            buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
 
-            console.log('selectedLabels');
-            console.log(selectedLabels);
+            // if button is not in the selectedLabels, add it to the array
+            if (buttonClickedIndex === -1) {
+                selectedLabels.push(buttonClicked);
+                // probably call a function here to draw on the canvas
+            }
+            // if it is not in selectedLabels, remove it from the array
+            // reset button bg color
+            if (buttonClickedIndex > -1) {
+                selectedLabels.splice(buttonClickedIndex, 1);
+                button.style("background-color","white")
+                // probably call a function here to remove it from the canvas
+            }
 
-
-
-            drawIcon();
-            updateTable(selectedLabels);
-        }
-
-
-
-
-        function drawIcon() {
-            //should this function filter out the original dataset to just include the rows with that element?
-            console.log('drawIcon');
-            // console.log(d3.select(this));
-        }
+        console.log('selectedLabels');
+        console.log(selectedLabels);
 
 
 
-        // Populate the data table
-        // updateTable( data )
-
-        // Update data table with new rows and cells
-        const episodeTable = d3.select("table#episode-table");
-
-        function updateTable(selectedLabels) {
-            console.log('updateTable')
-
-            episodeTable.selectAll("td").remove();
-            episodeTable.selectAll(".row").remove();
-            d3.select(".element_list").remove();
-            d3.select(".percentage text").remove();
-            // d3.select(".tutorials_percent").remove();
-
-            //buttonClicked is the icon that the user has selected
-            //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
-            filteredData = Array.from(bob_ross)
-            elementsText = "";
-            selectedLabels.forEach((i) => {
-                console.log(i);
-                filteredData = filteredData.filter(d => d[i] == 1)
-                label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
-
-                elementsText = elementsText + " " + label + ","
-
-
-            })
-
-
-            percentage = ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '%';
-
-            console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
-
-            d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
-
-
-            // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+        drawIcon();
+        updateTable(selectedLabels);
+    }
 
 
 
 
-            console.log('filteredData')
-            console.log(filteredData);
+    function drawIcon() {
+        //should this function filter out the original dataset to just include the rows with that element?
+        console.log('drawIcon');
+        // console.log(d3.select(this));
+    }
 
-            console.log('elementsText')
-            console.log(elementsText)
+
+
+    // Populate the data table
+    // updateTable( data )
+
+    // Update data table with new rows and cells
+    const episodeTable = d3.select("table#episode-table");
+
+    function updateTable(selectedLabels) {
+        console.log('updateTable')
+
+        episodeTable.selectAll("td").remove();
+        episodeTable.selectAll(".row").remove();
+        d3.select(".element_list").remove();
+        d3.select(".percentage text").remove();
+        // d3.select(".tutorials_percent").remove();
+
+        //buttonClicked is the icon that the user has selected
+        //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
+        filteredData = Array.from(bob_ross)
+        elementsText = "";
+        selectedLabels.forEach((i) => {
+            console.log(i);
+            filteredData = filteredData.filter(d => d[i] == 1)
+            label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
+
+            elementsText = elementsText + " " + label + ","
+
+
+        })
+
+
+        percentage = ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '%';
+
+        console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+        d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+
+
+        // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
 
 
 
-            d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
 
-            // First make table rows for each point using a data join 
-            var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
-                .join(enter => {
-                    // In the enter part, we add a <tr> and then three <td>
-                    let newRows = enter.append("tr").attr("class", "row")
+        console.log('filteredData')
+        console.log(filteredData);
 
-                    // newRows.append("td").text(d => d.title);
-                    // newRows.append("td").text(d => d.episode);
+        console.log('elementsText')
+        console.log(elementsText)
 
-                    cell = newRows.append("td").append("div").attr("class", "table_cell")
 
-                    cell.append("img")
-                        .attr("class", "cell_image")
-                        .attr("src", d => 'paintings/'+d.episode+'.jpg');
 
-                    cell.append("text")
-                        .text(d=>"Title: " + d.title)
-                    
-                    cell.append("text")
-                        .text(d=>"Episode: " + d.episode)
+        d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
 
-                }
-                    // update => {
-                    //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
-                    //     // Then repopulate them all over again
-                    //     // update.selectAll("td").remove()
+        // First make table rows for each point using a data join 
+        var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
+            .join(enter => {
+                // In the enter part, we add a <tr> and then three <td>
+                let newRows = enter.append("tr").attr("class", "row")
 
-                    //     update.append("td").text(d => d.title);
-                    //     update.append("td").text(d => d.episode);
-                    //     //need a column for the element?
-                    //     update.append("td").text(buttonClicked)
+                // newRows.append("td").text(d => d.title);
+                // newRows.append("td").text(d => d.episode);
 
-                    // }
-                )
-            console.log(tableRows)
-        }
+                cell = newRows.append("td").append("div").attr("class", "table_cell")
+
+                cell.append("img")
+                    .attr("class", "cell_image")
+                    .attr("src", d => 'paintings/' + d.episode + '.jpg');
+
+                cell.append("text")
+                    .text(d => "Title: " + d.title)
+
+                cell.append("text")
+                    .text(d => "Episode: " + d.episode)
+
+            }
+                // update => {
+                //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
+                //     // Then repopulate them all over again
+                //     // update.selectAll("td").remove()
+
+                //     update.append("td").text(d => d.title);
+                //     update.append("td").text(d => d.episode);
+                //     //need a column for the element?
+                //     update.append("td").text(buttonClicked)
+
+                // }
+            )
+        console.log(tableRows)
+    }
     }
 
     getData();
