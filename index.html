@@ -114,7 +114,11 @@
             .attr("width", 200)
             .attr("xlink:href", "canvas/bush.png")
 
-
+            canvas.append("svg:image")
+            .attr("x", 500)
+            .attr("y", 500)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/building.png")
         
     
 
@@ -124,7 +128,12 @@
             .attr("width", 70)
             .attr("xlink:href", "canvas/flower.png")
 
-     
+            canvas.append("svg:image")
+            .attr("x", 700)
+            .attr("y", 600)
+            .attr("width", 70)
+            .attr("xlink:href", "canvas/rocks.png")
+
 
 
         d3.select('.switch').on("change", function () {
