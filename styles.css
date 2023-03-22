@@ -94,6 +94,14 @@ h1 {
   background-color: #fcf8cc;
 }
 
+.buttonClicked {
+  background-color: #fcf8cc;
+}
+
+/* .buttonUnclicked {
+  background-color: white;
+} */
+
 .icons h4 {
     margin:0;
     font-weight: normal;

@@ -203,7 +203,7 @@
         function resetCanvas() {
 
             drawPoints(data);
-            f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
+            // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
 
         }
 
@@ -221,13 +221,24 @@
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex === -1) {
                 selectedLabels.push(buttonClicked);
+                // button.attr('class','buttonClicked')
                 // probably call a function here to draw on the canvas
             }
             // if it is not in selectedLabels, remove it from the array
             // reset button bg color
             if (buttonClickedIndex > -1) {
                 selectedLabels.splice(buttonClickedIndex, 1);
+                // button.classed('buttonClicked',false)
+                // button.classed('buttonUnclicked',true)
+                console.log(button);
                 button.style("background-color","white")
+                // idk whyy but the css hover disappears afte
+                    .on("mouseover", function () {
+                        button.style("background-color","#fcf8cc")
+                    .on("mouseout", function () {
+                        button.style("background-color", "white")
+                    })
+                })
                 // probably call a function here to remove it from the canvas
             }
 
