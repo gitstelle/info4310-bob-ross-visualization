@@ -151,10 +151,17 @@
                     .style("fill", "none")
                     .style("stroke-width", 20);
 
+                // add "framed" to selectedLabels to update the table
+                selectedLabels.push("framed")
+                updateTable(selectedLabels);
+
+
             }
             else {
                 //turn the frame off, if there is one
                 canvas.selectAll('.frame').remove();
+                selectedLabels.splice("framed")
+                updateTable(selectedLabels);
             }
         })
 
