@@ -83,30 +83,30 @@
             .attr("xlink:href", "canvas/conifer.png")
 
 
-            canvas.append("svg:image")
-            .attr("x", 500)
-            .attr("y", 25)
-            .attr("width", 600)
-            .attr("height", 400)
-            .attr("xlink:href", "canvas/fog.png")
-            canvas.append("svg:image")
-            .attr("x", 200)
-            .attr("y", 0)
-            .attr("width", 600)
-            .attr("height", 400)
-            .attr("xlink:href", "canvas/fog.png")
-            canvas.append("svg:image")
-            .attr("x", 150)
-            .attr("y", 150)
-            .attr("width", 400)
-            .attr("height", 200)
-            .attr("xlink:href", "canvas/fog.png")
-            canvas.append("svg:image")
-            .attr("x", 500)
-            .attr("y", 120)
-            .attr("width", 400)
-            .attr("height", 200)
-            .attr("xlink:href", "canvas/fog.png")
+            // canvas.append("svg:image")
+            // .attr("x", 500)
+            // .attr("y", 25)
+            // .attr("width", 600)
+            // .attr("height", 400)
+            // .attr("xlink:href", "canvas/fog.png")
+            // canvas.append("svg:image")
+            // .attr("x", 200)
+            // .attr("y", 0)
+            // .attr("width", 600)
+            // .attr("height", 400)
+            // .attr("xlink:href", "canvas/fog.png")
+            // canvas.append("svg:image")
+            // .attr("x", 150)
+            // .attr("y", 150)
+            // .attr("width", 400)
+            // .attr("height", 200)
+            // .attr("xlink:href", "canvas/fog.png")
+            // canvas.append("svg:image")
+            // .attr("x", 500)
+            // .attr("y", 120)
+            // .attr("width", 400)
+            // .attr("height", 200)
+            // .attr("xlink:href", "canvas/fog.png")
 
             canvas.append("svg:image")
             .attr("x", 500)
@@ -129,11 +129,42 @@
             .attr("xlink:href", "canvas/flower.png")
 
             canvas.append("svg:image")
-            .attr("x", 700)
+            .attr("x", 500)
             .attr("y", 600)
             .attr("width", 70)
             .attr("xlink:href", "canvas/rocks.png")
 
+            canvas.append("svg:image")
+            .attr("x", 700)
+            .attr("y", 500)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/fence.png")
+
+
+
+            canvas.append("svg:image")
+            .attr("x", 700)
+            .attr("y", 200)
+            .attr("width", 300)
+            .attr("xlink:href", "canvas/cloud1.png")
+
+            canvas.append("svg:image")
+            .attr("x", 300)
+            .attr("y", 200)
+            .attr("width", 300)
+            .attr("xlink:href", "canvas/cloud2.png")
+
+            canvas.append("svg:image")
+            .attr("x", 500)
+            .attr("y", 200)
+            .attr("width", 300)
+            .attr("xlink:href", "canvas/cloud3.png")
+
+            canvas.append("svg:image")
+            .attr("x", 770)
+            .attr("y", 50)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/sun.png")
 
 
         d3.select('.switch').on("change", function () {
@@ -261,11 +292,13 @@
     }
 
 
-
+    canvas.style("background-color", "#EEEEEE")
 
     function drawIcon() {
         //should this function filter out the original dataset to just include the rows with that element?
         console.log('drawIcon');
+      
+
         // console.log(d3.select(this));
     }
 
