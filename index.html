@@ -71,6 +71,40 @@
         const canvasHeight = canvas.attr("height")
         const canvasWidth = canvas.attr("width")
 
+        // Tooltip contains 1) element being hovered over 2) the percentage of paintings that contain ONLY this element
+
+        let tooltipWidth = 220;
+        let tooltipHeight = 60;
+        let tooltip = canvas.append("g")
+            .attr("class", "tooltip")
+            .attr("visibility", "hidden");
+
+        tooltip.append("rect")
+            .attr("fill", "#a10159")
+            .attr("opacity", 0.7)
+            .attr("x", -tooltipWidth / 2.0)
+            .attr("y", 0)
+            .attr("rx", 20)
+            .attr("ry", 20)
+            .attr("width", tooltipWidth)
+            .attr("height", tooltipHeight)
+
+
+        let txt = tooltip.append("text")
+            .attr("fill", "white")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "hanging")
+            .attr("x", 0)
+            .attr("y", 2)
+
+
+        let txt2 = tooltip.append("text")
+            .attr("fill", "white")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "hanging")
+            .attr("x", 0)
+            .attr("y", 22)
+
         var selectedLabels = [];
 
         // canvas.append("svg:image")
@@ -198,44 +232,48 @@
 
 
         canvas.append("svg:image")
+            .attr("class", "clouds_drawing")
             .attr("x", 700)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud1.png")
 
         canvas.append("svg:image")
+            .attr("class", "clouds_drawing")
             .attr("x", 300)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud2.png")
 
         canvas.append("svg:image")
+            .attr("class", "clouds_drawing")
             .attr("x", 500)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud3.png")
 
         canvas.append("svg:image")
+            .attr("class", "sun_drawing")
             .attr("x", 830)
             .attr("y", 0)
             .attr("width", 170)
             .attr("xlink:href", "canvas/sun.png")
 
-        // canvas.append("svg:image")
-        //     .attr("class", "grass_drawing")
-        //     .attr("x", 0)
-        //     .attr("y", 620)
-        //     .attr("width", 1000)
-        //     .attr("xlink:href", "canvas/grass.png")
-        //     .attr("visibility", "visible")
+        canvas.append("svg:image")
+            .attr("class", "grass_drawing")
+            .attr("x", 0)
+            .attr("y", 620)
+            .attr("width", 1000)
+            .attr("xlink:href", "canvas/grass.png")
+            .attr("visibility", "visible")
 
-        // canvas.append("svg:image")
-        //     .attr("class", "grass_drawing")
-        //     .attr("x", 0)
-        //     .attr("y", 632.59)
-        //     .attr("width", 1000)
-        //     .attr("xlink:href", "canvas/grass.png")
-        //     .attr("visibility", "visible")
+        canvas.append("svg:image")
+            .attr("class", "grass_drawing")
+            .attr("x", 0)
+            .attr("y", 632.59)
+            .attr("width", 1000)
+            .attr("xlink:href", "canvas/grass.png")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "flowers_drawing")
@@ -244,7 +282,46 @@
             .attr("width", 1000)
             .attr("height", 200)
             .attr("xlink:href", "canvas/flowers.png")
-            .attr("visibility", "visible")
+            .attr("visibility", "hidden")
+
+
+
+
+        canvas.selectAll("image")
+            .on("mouseover", mouseEntersDrawing)
+            .on("mouseout", mouseLeavesDrawing)
+
+        function mouseEntersDrawing() {
+
+            console.log("moused over")
+
+            tooltip.style("visibility", "visible")
+
+            drawingClass = d3.select(this).attr('class')
+
+            // drawingClass.indexOf("_")
+
+            label = drawingClass.substring(0, drawingClass.indexOf("_"))
+
+
+            elementPercent = ((Number(bob_ross_counts.filter(d => d['element'] == label)[0].count) / bob_ross.length) * 100).toFixed(1) + '%'
+
+            txt.text(label.toUpperCase());
+            txt2.text('Percentage: ' + elementPercent);
+
+
+
+            let xPos = d3.select(this).attr('x');
+            let yPos = d3.select(this).attr('y');
+
+            tooltip.attr("transform", `translate(${(xPos)},${yPos})`);
+
+        }
+
+        function mouseLeavesDrawing() {
+            console.log("moused out")
+            tooltip.style("visibility", "hidden");
+        }
 
         d3.select('.switch').on("change", function () {
             selected = d3.select("#toggle")._groups[0][0].checked;
