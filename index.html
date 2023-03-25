@@ -253,6 +253,12 @@
             .attr("width", 200)
             .attr("xlink:href", "canvas/river.png")
 
+            canvas.append("svg:image")
+            .attr("x", 770)
+            .attr("y", 50)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/waterfall.png")
+
 
         d3.select('.switch').on("change", function () {
             selected = d3.select("#toggle")._groups[0][0].checked;
