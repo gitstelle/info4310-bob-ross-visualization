@@ -95,7 +95,7 @@ h1 {
 
 .icons button:hover {
   background-color: #fff3b6;
-  transform: translateY(-7px);
+  transform: translateY(-5px);
 }
 
 .buttonClicked {
@@ -197,6 +197,7 @@ h1 {
   .cell_image {
     max-width:100%;
     height:auto;
+    padding:5px;
   }
 
   .right {
@@ -209,13 +210,17 @@ h1 {
 
   }
 
+  table {
+    margin-right:20px;
+  }
+
   tr {
     padding:5px;
   }
 
   tr text {
-    margin:2px;
+    margin:3px;
   }
   .table_cell {
-    border-bottom: 4px solid #0091c2;
+    border-bottom: 4px solid #0283ae;
   }
