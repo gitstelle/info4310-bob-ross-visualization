@@ -78,14 +78,14 @@
             .attr("width", 400)
             .attr("height", 500)
             .attr("xlink:href", "canvas/mountain.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "tree_drawing")
             .attr("width", 200)
             .attr("height", 600)
             .attr("xlink:href", "canvas/tree.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
 
         canvas.append("svg:image")
@@ -95,7 +95,7 @@
             .attr("width", 600)
             .attr("height", 400)
             .attr("xlink:href", "canvas/fog.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "fog_drawing")
@@ -104,7 +104,7 @@
             .attr("width", 600)
             .attr("height", 400)
             .attr("xlink:href", "canvas/fog.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "fog_drawing")
@@ -113,7 +113,7 @@
             .attr("width", 400)
             .attr("height", 200)
             .attr("xlink:href", "canvas/fog.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "fog_drawing")
@@ -122,7 +122,7 @@
             .attr("width", 400)
             .attr("height", 200)
             .attr("xlink:href", "canvas/fog.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "bushes_drawing")
@@ -130,7 +130,7 @@
             .attr("y", 500)
             .attr("width", 200)
             .attr("xlink:href", "canvas/bushes.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "building_drawing")
@@ -138,7 +138,7 @@
             .attr("y", 500)
             .attr("width", 200)
             .attr("xlink:href", "canvas/building.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "flowers_drawing")
@@ -146,7 +146,7 @@
             .attr("y", 500)
             .attr("width", 70)
             .attr("xlink:href", "canvas/flower.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
 
         canvas.append("svg:image")
             .attr("class", "rocks_drawing")
@@ -154,7 +154,34 @@
             .attr("y", 600)
             .attr("width", 70)
             .attr("xlink:href", "canvas/rocks.png")
-            .attr("visibility", "hidden")
+            .attr("visibility", "visible")
+
+        canvas.append("svg:image")
+            .attr("class", "snow_drawing")
+            .attr("x", 700)
+            .attr("y", 600)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/snow.png")
+            .attr("visibility", "visible")
+
+
+        canvas.append("svg:image")
+            .attr("class", "bridge_drawing")
+            .attr("x", 700)
+            .attr("y", 400)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/bridge.png")
+            .attr("visibility", "visible")
+
+
+        canvas.append("svg:image")
+            .attr("class", "path_drawing")
+            .attr("x", 700)
+            .attr("y", 400)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/path.png")
+            .attr("visibility", "visible")
+
 
             canvas.append("svg:image")
             .attr("x", 700)
@@ -377,7 +404,7 @@
                     console.log(className)
 
                     canvas.selectAll(className).attr("visibility", "visible");
-                } 
+                }
             })
 
             // console.log(d3.select(this));
