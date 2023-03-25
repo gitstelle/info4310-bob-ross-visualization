@@ -183,81 +183,101 @@
             .attr("visibility", "visible")
 
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 700)
             .attr("y", 500)
             .attr("width", 200)
             .attr("xlink:href", "canvas/fence.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 700)
             .attr("y", 500)
             .attr("width", 200)
             .attr("xlink:href", "canvas/fence.png")
+            .attr("visibility", "visible")
 
 
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 700)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud1.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 300)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud2.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 500)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud3.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 770)
             .attr("y", 50)
             .attr("width", 200)
             .attr("xlink:href", "canvas/sun.png")
+            .attr("visibility", "visible")
 
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 700)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud1.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 300)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud2.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 500)
             .attr("y", 200)
             .attr("width", 300)
             .attr("xlink:href", "canvas/cloud3.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 770)
             .attr("y", 50)
             .attr("width", 200)
             .attr("xlink:href", "canvas/sun.png")
+            .attr("visibility", "visible")
 
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
             .attr("x", 770)
             .attr("y", 50)
             .attr("width", 200)
-            .attr("xlink:href", "canvas/river.png")
+            .attr("xlink:href", "canvas/lake.png")
+            .attr("visibility", "visible")
 
-            canvas.append("svg:image")
+
+        canvas.append("svg:image")
+            .attr("x", 100)
+            .attr("y", 500)
+            .attr("width", 800)
+            .attr("xlink:href", "canvas/grass2.png")
+            .attr("visibility", "visible")
+
+        canvas.append("svg:image")
             .attr("x", 770)
             .attr("y", 50)
             .attr("width", 200)
             .attr("xlink:href", "canvas/waterfall.png")
+            .attr("visibility", "visible")
 
 
         d3.select('.switch').on("change", function () {
@@ -385,7 +405,7 @@
         }
 
 
-    canvas.style("background-color", "#EEEEEE")
+        canvas.style("background-color", "#EEEEEE")
 
         function drawIcon(selectedButtons) {
             //should this function filter out the original dataset to just include the rows with that element?
