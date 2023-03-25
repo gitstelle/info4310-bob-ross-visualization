@@ -81,17 +81,21 @@ h1 {
     /* margin:5px; */
     width:70px;
     height:70px;
-    margin:2px;
-    border: 2px solid black;
+    margin:5px;
+    border: none;
     border-radius: 10%;
+    box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.3);
     background-color: white;
     /* color:white; */
     cursor: url("paint-brush.png"), auto;
+    transition: all 0.3s ease 0s;
+
 
 }
 
 .icons button:hover {
-  background-color: #fcf8cc;
+  background-color: #fff3b6;
+  transform: translateY(-5px);
 }
 
 .buttonClicked {
@@ -108,6 +112,9 @@ h1 {
     font-family: 'Trebuchet MS';
     font-size: 14px;
     text-align: center;
+    color:#02475f;
+    font-weight: bold;
+    
 }
 
 .frame_heading {
@@ -190,6 +197,7 @@ h1 {
   .cell_image {
     max-width:100%;
     height:auto;
+    padding:5px;
   }
 
   .right {
@@ -200,4 +208,19 @@ h1 {
 
     margin-left: 20px;
 
+  }
+
+  table {
+    margin-right:20px;
+  }
+
+  tr {
+    padding:5px;
+  }
+
+  tr text {
+    margin:3px;
+  }
+  .table_cell {
+    border-bottom: 4px solid #0283ae;
   }
