@@ -16,8 +16,10 @@
 
     <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
     <div class="frame_toggle">
-        <div class = "frame_heading"><h4> frame your work? </h4></div>
-        
+        <div class="frame_heading">
+            <h4> frame your work? </h4>
+        </div>
+
         <label class="switch">
             <input type="checkbox" id="toggle" value="true" name="toggles">
             <span class="slider round">
@@ -28,7 +30,7 @@
     <div class="container">
 
         <div class="left">
-           
+
             <div class="canvas">
                 <!-- <h2>Canvas</h2> -->
                 <svg id="canvas" width=1000 height=700></svg>
@@ -72,67 +74,87 @@
         var selectedLabels = [];
 
         canvas.append("svg:image")
+            .attr("class", "mountain_drawing")
             .attr("width", 400)
             .attr("height", 500)
-            .attr("xlink:href", "canvas/mountains.png")
+            .attr("xlink:href", "canvas/mountain.png")
+            .attr("visibility", "hidden")
 
-
-            canvas.append("svg:image")
+        canvas.append("svg:image")
+            .attr("class", "tree_drawing")
             .attr("width", 200)
             .attr("height", 600)
-            .attr("xlink:href", "canvas/conifer.png")
+            .attr("xlink:href", "canvas/tree.png")
+            .attr("visibility", "hidden")
 
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
+            .attr("class", "fog_drawing")
             .attr("x", 500)
             .attr("y", 25)
             .attr("width", 600)
             .attr("height", 400)
             .attr("xlink:href", "canvas/fog.png")
-            canvas.append("svg:image")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "fog_drawing")
             .attr("x", 200)
             .attr("y", 0)
             .attr("width", 600)
             .attr("height", 400)
             .attr("xlink:href", "canvas/fog.png")
-            canvas.append("svg:image")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "fog_drawing")
             .attr("x", 150)
             .attr("y", 150)
             .attr("width", 400)
             .attr("height", 200)
             .attr("xlink:href", "canvas/fog.png")
-            canvas.append("svg:image")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "fog_drawing")
             .attr("x", 500)
             .attr("y", 120)
             .attr("width", 400)
             .attr("height", 200)
             .attr("xlink:href", "canvas/fog.png")
+            .attr("visibility", "hidden")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
+            .attr("class", "bushes_drawing")
             .attr("x", 500)
             .attr("y", 500)
             .attr("width", 200)
-            .attr("xlink:href", "canvas/bush.png")
+            .attr("xlink:href", "canvas/bushes.png")
+            .attr("visibility", "hidden")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
+            .attr("class", "building_drawing")
             .attr("x", 500)
             .attr("y", 500)
             .attr("width", 200)
             .attr("xlink:href", "canvas/building.png")
-        
-    
+            .attr("visibility", "hidden")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
+            .attr("class", "flowers_drawing")
             .attr("x", 650)
             .attr("y", 500)
             .attr("width", 70)
             .attr("xlink:href", "canvas/flower.png")
+            .attr("visibility", "hidden")
 
-            canvas.append("svg:image")
+        canvas.append("svg:image")
+            .attr("class", "rocks_drawing")
             .attr("x", 700)
             .attr("y", 600)
             .attr("width", 70)
             .attr("xlink:href", "canvas/rocks.png")
+            .attr("visibility", "hidden")
 
 
 
@@ -240,125 +262,143 @@
                 // button.classed('buttonClicked',false)
                 // button.classed('buttonUnclicked',true)
                 console.log(button);
-                button.style("background-color","white")
-                // idk whyy but the css hover disappears afte
+                button.style("background-color", "white")
+                    // idk whyy but the css hover disappears afte
                     .on("mouseover", function () {
-                        button.style("background-color","#fcf8cc")
-                    .on("mouseout", function () {
-                        button.style("background-color", "white")
+                        button.style("background-color", "#fcf8cc")
+                            .on("mouseout", function () {
+                                button.style("background-color", "white")
+                            })
                     })
-                })
                 // probably call a function here to remove it from the canvas
             }
 
-        console.log('selectedLabels');
-        console.log(selectedLabels);
+            console.log('selectedLabels');
+            console.log(selectedLabels);
 
 
 
-        drawIcon();
-        updateTable(selectedLabels);
-    }
-
-
-
-
-    function drawIcon() {
-        //should this function filter out the original dataset to just include the rows with that element?
-        console.log('drawIcon');
-        // console.log(d3.select(this));
-    }
-
-
-
-    // Populate the data table
-    // updateTable( data )
-
-    // Update data table with new rows and cells
-    const episodeTable = d3.select("table#episode-table");
-
-    function updateTable(selectedLabels) {
-        console.log('updateTable')
-
-        episodeTable.selectAll("td").remove();
-        episodeTable.selectAll(".row").remove();
-        d3.select(".element_list").remove();
-        d3.select(".percentage text").remove();
-        // d3.select(".tutorials_percent").remove();
-
-        //buttonClicked is the icon that the user has selected
-        //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
-        filteredData = Array.from(bob_ross)
-        elementsText = "";
-        selectedLabels.forEach((i) => {
-            console.log(i);
-            filteredData = filteredData.filter(d => d[i] == 1)
-            label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
-
-            elementsText = elementsText + " " + label + ","
-
-
-        })
-
-
-        percentage = ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '%';
-
-        console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
-
-        d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
-
-
-        // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+            drawIcon(selectedLabels);
+            updateTable(selectedLabels);
+        }
 
 
 
 
-        console.log('filteredData')
-        console.log(filteredData);
-
-        console.log('elementsText')
-        console.log(elementsText)
+        function drawIcon(selectedButtons) {
+            //should this function filter out the original dataset to just include the rows with that element?
+            console.log('drawIcon');
 
 
 
-        d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+            selectedButtons.forEach((d) => {
 
-        // First make table rows for each point using a data join 
-        var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
-            .join(enter => {
-                // In the enter part, we add a <tr> and then three <td>
-                let newRows = enter.append("tr").attr("class", "row")
+                if (d === 'night') {
+                    canvas.style('background-color', '#00008B')
+                }
+                else {
+                    className = '.' + d + '_drawing'
 
-                // newRows.append("td").text(d => d.title);
-                // newRows.append("td").text(d => d.episode);
+                    console.log('className')
+                    console.log(className)
 
-                cell = newRows.append("td").append("div").attr("class", "table_cell")
+                    canvas.selectAll(className).attr("visibility", "visible");
+                } 
+            })
 
-                cell.append("img")
-                    .attr("class", "cell_image")
-                    .attr("src", d => 'paintings/' + d.episode + '.jpg');
+            // console.log(d3.select(this));
+        }
 
-                cell.append("text")
-                    .text(d => "Title: " + d.title)
 
-                cell.append("text")
-                    .text(d => "Episode: " + d.episode)
 
-            }
-                // update => {
-                //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
-                //     // Then repopulate them all over again
-                //     // update.selectAll("td").remove()
+        // Populate the data table
+        // updateTable( data )
 
-                //     update.append("td").text(d => d.title);
-                //     update.append("td").text(d => d.episode);
-                //     //need a column for the element?
-                //     update.append("td").text(buttonClicked)
+        // Update data table with new rows and cells
+        const episodeTable = d3.select("table#episode-table");
 
-                // }
-            )
-        console.log(tableRows)
-    }
+        function updateTable(selectedLabels) {
+            console.log('updateTable')
+
+            episodeTable.selectAll("td").remove();
+            episodeTable.selectAll(".row").remove();
+            d3.select(".element_list").remove();
+            d3.select(".percentage text").remove();
+            // d3.select(".tutorials_percent").remove();
+
+            //buttonClicked is the icon that the user has selected
+            //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
+            filteredData = Array.from(bob_ross)
+            elementsText = "";
+            selectedLabels.forEach((i) => {
+                console.log(i);
+                filteredData = filteredData.filter(d => d[i] == 1)
+                label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
+
+                elementsText = elementsText + " " + label + ","
+
+
+            })
+
+
+            percentage = ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '%';
+
+            console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+            d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+
+
+            // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+
+
+
+
+            console.log('filteredData')
+            console.log(filteredData);
+
+            console.log('elementsText')
+            console.log(elementsText)
+
+
+
+            d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+
+            // First make table rows for each point using a data join 
+            var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
+                .join(enter => {
+                    // In the enter part, we add a <tr> and then three <td>
+                    let newRows = enter.append("tr").attr("class", "row")
+
+                    // newRows.append("td").text(d => d.title);
+                    // newRows.append("td").text(d => d.episode);
+
+                    cell = newRows.append("td").append("div").attr("class", "table_cell")
+
+                    cell.append("img")
+                        .attr("class", "cell_image")
+                        .attr("src", d => 'paintings/' + d.episode + '.jpg');
+
+                    cell.append("text")
+                        .text(d => "Title: " + d.title)
+
+                    cell.append("text")
+                        .text(d => "Episode: " + d.episode)
+
+                }
+                    // update => {
+                    //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
+                    //     // Then repopulate them all over again
+                    //     // update.selectAll("td").remove()
+
+                    //     update.append("td").text(d => d.title);
+                    //     update.append("td").text(d => d.episode);
+                    //     //need a column for the element?
+                    //     update.append("td").text(buttonClicked)
+
+                    // }
+                )
+            console.log(tableRows)
+        }
     }
 
     getData();
