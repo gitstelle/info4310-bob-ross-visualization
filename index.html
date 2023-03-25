@@ -220,6 +220,18 @@
             .attr("xlink:href", "canvas/sun.png")
 
 
+            canvas.append("svg:image")
+            .attr("x", 770)
+            .attr("y", 50)
+            .attr("width", 200)
+            .attr("xlink:href", "canvas/lake.png")
+
+            canvas.append("svg:image")
+            .attr("x", 100)
+            .attr("y", 500)
+            .attr("width", 800)
+            .attr("xlink:href", "canvas/grass2.png")
+
         d3.select('.switch').on("change", function () {
             selected = d3.select("#toggle")._groups[0][0].checked;
             if (selected) {
