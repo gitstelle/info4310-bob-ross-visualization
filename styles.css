@@ -98,9 +98,10 @@ button:hover {
   background-color: #fcf8cc;
 }
 
-/* .buttonUnclicked {
+.buttonUnclicked {
   background-color: white;
-} */
+}
+
 #resetButton {
   /* padding-top: -10px; */
   background-color:rgb(250, 136, 155);
