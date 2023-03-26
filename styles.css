@@ -255,3 +255,6 @@ color:rgb(83, 29, 73)
     height:300px;
     width: auto;
   }
+  .overview {
+    margin-bottom: 10;
+  }
