@@ -277,36 +277,40 @@
 
 
         canvas.selectAll("image")
-            .on("mouseover", mouseEntersDrawing)
+            .on("mouseover", function (event) {
+                console.log("moused over")
+
+                tooltip.style("visibility", "visible")
+
+                drawingClass = d3.select(this).attr('class')
+
+                // drawingClass.indexOf("_")
+
+                label = drawingClass.substring(0, drawingClass.indexOf("_"))
+
+
+                elementPercent = ((Number(bob_ross_counts.filter(d => d['element'] == label)[0].count) / bob_ross.length) * 100).toFixed(1) + '%'
+
+                txt.text(label.toUpperCase());
+                txt2.text('Percentage: ' + elementPercent);
+
+
+
+                let xPos = d3.select(this).attr('x');
+                let yPos = d3.select(this).attr('y');
+
+                tooltip.attr("transform", `translate(${(d3.pointer(event)[0]+100)},${d3.pointer(event)[1]+100})`);
+
+            })
+            .on("mousemove", function(event) {
+                tooltip.attr("transform", `translate(${(d3.pointer(event)[0]+100)},${d3.pointer(event)[1]+100})`);
+            })
             .on("mouseout", mouseLeavesDrawing)
 
 
+        function mouseMoves() {
 
-
-        function mouseEntersDrawing() {
-
-            console.log("moused over")
-
-            tooltip.style("visibility", "visible")
-
-            drawingClass = d3.select(this).attr('class')
-
-            // drawingClass.indexOf("_")
-
-            label = drawingClass.substring(0, drawingClass.indexOf("_"))
-
-
-            elementPercent = ((Number(bob_ross_counts.filter(d => d['element'] == label)[0].count) / bob_ross.length) * 100).toFixed(1) + '%'
-
-            txt.text(label.toUpperCase());
-            txt2.text('Percentage: ' + elementPercent);
-
-
-
-            let xPos = d3.select(this).attr('x');
-            let yPos = d3.select(this).attr('y');
-
-            tooltip.attr("transform", `translate(${(xPos)},${yPos})`);
+            // tooltip.attr("transform", `translate(${(d3.pointer(event)[0])},${d3.pointer(event)[1]})`);
 
         }
 
@@ -371,7 +375,7 @@
 
         console.log(f1ButtonsData)
         const f1div = d3.select('.icons')
-        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').attr('class','iconButton').on('click', iconClicked);
+        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').attr('class', 'iconButton').on('click', iconClicked);
 
 
         console.log(f1Buttons)
@@ -385,7 +389,7 @@
 
 
         // reset button
-        f1div.append('button').attr('class','iconButton').attr('id','resetButton').append('h4').text("erase canvas").on('click',resetCanvas)
+        f1div.append('button').attr('class', 'iconButton').attr('id', 'resetButton').append('h4').text("erase canvas").on('click', resetCanvas)
 
 
 
