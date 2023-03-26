@@ -45,7 +45,9 @@
 
         <div class="right">
             <div class="tutorials_head">
-                <span class="percentage"></span> <span style="font-size: 20px;">Tutorials</span>
+                <h3 id = 'containing'></h3>
+                <h4 id = 'percentage'></h4>
+                <!-- <span class="percentage"></span> <span style="font-size: 20px;"></span> -->
 
             </div>
             <div class="elements" id="elements"></div>
@@ -187,6 +189,8 @@
 
 
         var selectedLabels = [];
+
+        canvas.style("background-color", "#d8d0c1")
 
         canvas.append("svg:image")
             .attr("class", "sun_drawing")
@@ -344,9 +348,6 @@
             .attr("xlink:href", "canvas_final/grass.png")
             .attr("visibility", "hidden")
 
-
-
-
         canvas.append("svg:image")
             .attr("class", "snow_drawing")
             .attr("x", 30)
@@ -379,8 +380,8 @@
                     .style("fill", "none")
                     .style("stroke-width", 20);
 
-                // add "framed" to selectedLabels to update the table
-                selectedLabels.push("framed")
+                // add "frame" to selectedLabels to update the table
+                selectedLabels.push("frame")
                 updateTable(selectedLabels);
 
 
@@ -388,7 +389,7 @@
             else {
                 //turn the frame off, if there is one
                 canvas.selectAll('.frame').remove();
-                selectedLabels.splice("framed")
+                selectedLabels.splice("frame")
                 updateTable(selectedLabels);
             }
         })
@@ -430,8 +431,11 @@
 
 
         function resetCanvas() {
-            canvas.selectAll(className).attr("visibility", "hidden");
-            f1Buttons.style('background-color', 'white')
+
+            canvas.selectAll('image').attr("visibility", "hidden");
+            canvas.style("background-color", "#d8d0c1");
+            f1Buttons.classed('buttonUnclicked', true)
+            f1Buttons.classed('buttonClicked',false)
             selectedLabels = [];
             updateTable(selectedLabels);
             // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
@@ -443,45 +447,47 @@
             console.log('iconClicked2')
             console.log(d3.select(this).datum().label)
             button = d3.select(this)
-            button.style('background-color', '#fcf8cc')
+            // button.style('background-color', '#fcf8cc')
+            button.attr('class','iconButton buttonClicked')
+            button.classed('buttonUnclicked',false)
 
             // label
             buttonClicked = d3.select(this).datum().label;
             buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
 
             // if button is not in the selectedLabels, add it to the array
-            if (buttonClickedIndex === -1) {
+            if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
-                // button.attr('class','buttonClicked')
+                
                 // probably call a function here to draw on the canvas
             }
             // if it is not in selectedLabels, remove it from the array
             // reset button bg color
             if (buttonClickedIndex > -1) {
                 selectedLabels.splice(buttonClickedIndex, 1);
-                // button.classed('buttonClicked',false)
-                // button.classed('buttonUnclicked',true)
+                
+                button.classed('buttonClicked',false)
+                button.attr('class','iconButton buttonUnclicked')
+                
                 console.log(button);
-                console.log('buttonClicked')
 
-
-                button.style("background-color", "white")
-                    // idk whyy but the css hover disappears afte
-                    .on("mouseover", function () {
-                        button.style("background-color", "#fcf8cc")
-                    })
-                    .on("mouseout", function () {
-                        button.style("background-color", "white")
-                    })
+                // button.style("background-color", "white")
+                //     // idk whyy but the css hover disappears afte
+                //     .on("mouseover", function () {
+                //         button.style("background-color", "#fcf8cc")
+                //     })
+                //     .on("mouseout", function () {
+                //         button.style("background-color", "white")
+                //     })
 
                 // REMOVE DRAWING FROM CANVAS
                 canvas.select('.' + buttonClicked + '_drawing').attr("visibility", "hidden");
                 if (buttonClicked == 'night') {
-                    canvas.style("background-color", "#EEEEEE")
+                    canvas.style("background-color", "#d8d0c1")
                 }
             }
 
-            console.log('selectedLabels');
+            console.log('selectedLabels HERE');
             console.log(selectedLabels);
 
 
@@ -544,15 +550,30 @@
 
             })
 
+            containsLabel = d3.select('#containing')
 
-            percentage = ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '%';
+            percentageLabel = d3.select('#percentage')
 
-            console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
-
-            d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+            contains = "Your painting containing:"+ elementsText.slice(0,-1)
 
 
-            // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+            percent = 'can be found in '+((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
+
+            // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+            containsLabel.text(contains)
+
+            percentageLabel.text(percent)
+
+
+            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+
+    
+
+            // d3.select(".percentage").append('h3').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+
+
+            // d3.select(".tutorials_head").append('text').attr("class", "tutorials_percent").text(percentage + " Tutorials");
 
 
 
@@ -565,7 +586,7 @@
 
 
 
-            d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
 
             // First make table rows for each point using a data join 
             var tableRows = episodeTable.selectAll("tr.row").data(filteredData)

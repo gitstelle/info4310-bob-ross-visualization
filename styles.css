@@ -17,8 +17,13 @@ body {
   background-color: #fffcf8;
 }
 
-h3 {
+h3,h4 {
+  margin-top:0;
   text-align: center;
+}
+
+h4#percentage {
+  margin:0;
 }
 
 #quote {
@@ -77,9 +82,9 @@ h3 {
 
 .iconButton {
     /* margin:5px; */
-    width:63px;
-    height:63px;
-    margin:5px;
+    width:64px;
+    height:64px;
+    margin:4px;
     border: none;
     border-radius: 10%;
     box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.3);
@@ -98,9 +103,10 @@ button:hover {
   background-color: #fcf8cc;
 }
 
-/* .buttonUnclicked {
+.buttonUnclicked {
   background-color: white;
-} */
+}
+
 #resetButton {
   /* padding-top: -10px; */
   background-color:rgb(250, 136, 155);
@@ -213,7 +219,7 @@ color:rgb(83, 29, 73)
   .right {
     overflow-y:auto;
     height:700px;
-    min-width: 300px;
+    min-width: 290px;
 
     flex-grow: 1;
 
