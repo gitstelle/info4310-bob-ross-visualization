@@ -10,24 +10,26 @@
     <h1>The Works of Bob Ross</h1>
     <p id=quote><q>We don't make mistakes, just happy little accidents.</q></p>
 
-    <div class="icons">
-        <!-- <img class="evergreen_icon" src="icons/icons8-evergreen-100.png" width="100" height="100"> -->
-    </div>
+
 
     <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
-    <div class="frame_toggle">
-        <div class="frame_heading">
-            <h4> frame your work? </h4>
-        </div>
 
-        <label class="switch">
-            <input type="checkbox" id="toggle" value="true" name="toggles">
-            <span class="slider round">
-            </span>
-        </label>
-    </div>
 
     <div class="container">
+        <div class="iconCont">
+            <div class="icons">
+                <h3>Make a painting!</h3>
+
+            </div>
+            <div class="frame_toggle">
+                <h4> frame your work? </h4>
+                <label class="switch">
+                    <input type="checkbox" id="toggle" value="true" name="toggles">
+                    <span class="slider round">
+                    </span>
+                </label>
+            </div>
+        </div>
 
         <div class="left">
 
@@ -379,7 +381,7 @@
 
         console.log(f1ButtonsData)
         const f1div = d3.select('.icons')
-        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').on('click', iconClicked);
+        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').attr('class','iconButton').on('click', iconClicked);
 
 
         console.log(f1Buttons)
@@ -389,12 +391,13 @@
             .attr('height', 40)
             .attr("src", d => d.h2)
 
-        f1Buttons.append('h4').text(d => d.label);
+        f1Buttons.append('h4').text(d => d.label)
 
 
         // reset button
-        const resetButton = d3.select('div#header')
-        resetButton.append('button').append('text').text("Reset Map").on('click', resetCanvas);
+        f1div.append('button').attr('class','iconButton').attr('id','resetButton').append('h4').text("erase canvas").on('click',resetCanvas)
+
+
 
         function resetCanvas() {
 
@@ -431,10 +434,11 @@
                     // idk whyy but the css hover disappears afte
                     .on("mouseover", function () {
                         button.style("background-color", "#fcf8cc")
-                            .on("mouseout", function () {
-                                button.style("background-color", "white")
-                            })
                     })
+                    .on("mouseout", function () {
+                        button.style("background-color", "white")
+                    })
+
                 // probably call a function here to remove it from the canvas
             }
 
