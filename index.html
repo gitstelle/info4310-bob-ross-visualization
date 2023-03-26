@@ -417,6 +417,8 @@
 
         // store this info to move the previous bubble back
         var prevBubble = { x: 0, y: 0, rad: 0 };
+        var prevBub = null; // use this to move it back
+        var prevBubR = null; // use this shrink back
 
 
         function iconClicked() {
@@ -467,15 +469,15 @@
             rad = bubbleScale(thisBubble.datum().count);
 
             // dec radius
-            d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", prevBubble.rad)
-            
-            // move bubble back
-            console.log('wow')
-            console.log(prevBubble)
-            thisBubble.transition().duration(400).attr("transform", `translate(${(fixedPosx-prevBubble.x)*-1},${(fixedPosy-prevBubble.y)*-1})`)     
-            
-            
+            // d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", prevBubble.rad)
 
+            // move bubble back
+            if (prevBub !== null) {
+                console.log('wow')
+                console.log(prevBubble)
+                prevBubR.transition().duration(600).attr("r", prevBubble.rad)
+                prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 3)})`)
+            }
 
 
             // if button is not in the selectedLabels, add it to the array
@@ -492,6 +494,8 @@
                 prevBubble.x = xpos;
                 prevBubble.y = ypos;
                 prevBubble.rad = rad;
+                prevBub = thisBubble;
+                prevBubR = d3.select(filteredBubble[0].children[0]);
 
             }
             // if it is not in selectedLabels, remove it from the array
