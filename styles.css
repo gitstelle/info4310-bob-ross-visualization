@@ -235,3 +235,7 @@ color:rgb(83, 29, 73)
   .table_cell {
     border-bottom: 4px solid #0283ae;
   }
+
+  .overview {
+    margin-bottom: 10;
+  }

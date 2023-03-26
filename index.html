@@ -32,6 +32,10 @@
         </div>
 
         <div class="left">
+            <div class = "overview">
+                <svg id="bubbles" height="350" width="100%"></svg>
+
+            </div>
 
             <div class="canvas">
                 <!-- <h2>Canvas</h2> -->
@@ -72,6 +76,115 @@
         const canvas = d3.select("svg#canvas")
         const canvasHeight = canvas.attr("height")
         const canvasWidth = canvas.attr("width")
+
+
+        const bubblessvg = d3.select("svg#bubbles");
+        const bubbleswidth = bubblessvg.attr("width");
+        const bubblesheight = bubblessvg.attr("height");
+        const bubblesmargin = { top: 10, right: 10, bottom: 10, left: 10 };
+        const bubblesWidth = canvasWidth - bubblesmargin.left - bubblesmargin.right;
+        const bubblesHeight = canvasHeight - bubblesmargin.top - bubblesmargin.bottom;
+        const bubblesselector = bubblessvg.append("g")
+                            .attr("transform","translate("+bubblesmargin.left+","+bubblesmargin.top+")");
+
+        
+        const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
+        const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([30, 45]);
+        const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
+        var bubblecolorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.map(bob_ross_counts, d => d.element))
+
+        // const bubblesselector = bubblessvg.append("g");
+
+        packedbubble = bubblesselector.selectAll('g.bubble')
+            .data(bob_ross_counts)
+            .join("g")
+            .attr("id", "bubble")
+            .attr("transform", `translate(${0},${-bubblesHeight/4})`)
+            // .on('mouseover', mouseEntersBubble)
+            // .on('mouseout', mouseLeavesBubble);
+
+        let blabels = packedbubble.append("text")
+            .attr("id", "blabel")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "16px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+            // .attr("transform", `translate(${0},${-10})`)
+
+            //on click: 
+            // transform translate blabels .attr("transform", `translate(${0},${-10})`)
+            // make blabels_percent visible
+
+        let blabels_percent = packedbubble.append("text")
+            .attr("id", "blabel_percent")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "16px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+            .attr("transform", `translate(${0},${10})`)
+            .attr("visibility", "hidden")
+
+
+
+        var bubblenode = packedbubble.append("circle")
+            .attr("class", "bubbles")
+            .attr('cx', 0)
+            .attr('cy', bubblesHeight / 2)
+            .attr("fill", d => bubblecolorScale(d.element))
+            .attr("stroke", "none")
+            .style("stroke-width", 0)
+            .attr('r', d => bubbleScale(d.count));
+            // .on("mouseover", function () {
+            //     thisBubble = d3.select(this);
+            //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
+            // })
+            // .on("mouseout", function () {
+            //     thisBubble = d3.select(this);
+            //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
+            // });
+
+
+
+        var bubblesim = d3.forceSimulation()
+            .nodes(bob_ross_counts)
+            .force("center", d3.forceCenter()
+                .x(bubblesWidth / 2)
+                .y(bubblesHeight / 2))
+            .force("repulse", d3.forceManyBody()
+                .strength(0.005))
+            .force("collision", d3.forceCollide()
+                .radius(d => (bubbleScale(d.count) + 3))
+                .iterations(1))
+            .force("xpos", d3.forceX()
+                .strength(0.025))
+            .force("ypos", d3.forceY()
+                .strength(0.5))
+            .on("tick", function (d) {
+                bubblenode.attr("cx", d => Math.min(bubblesWidth, d.x))
+                    .attr("cy", d => Math.min(bubblesHeight, d.y))
+                blabels.attr("x", d => Math.min(bubblesWidth, d.x))
+                    .attr("y", d => Math.min(bubblesHeight, d.y))
+                    .attr("width", "20")
+                    .text(d => d.element)
+
+                blabels_percent.attr("x", d => Math.min(bubblesWidth, d.x))
+                    .attr("y", d => Math.min(bubblesHeight, d.y))
+                    .attr("width", "20")
+                    .text("hi")
+
+                blabels.raise()
+                blabels_percent.raise()
+            });
+        while (bubblesim.alpha() > 0.01) {
+            bubblesim.tick()
+        }
+
 
         var selectedLabels = [];
 
