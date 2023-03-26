@@ -321,7 +321,8 @@
 
             canvas.selectAll('image').attr("visibility", "hidden");
             canvas.style("background-color", "#d8d0c1");
-            f1Buttons.style('background-color', 'white')
+            f1Buttons.classed('buttonUnclicked', true)
+            f1Buttons.classed('buttonClicked',false)
             selectedLabels = [];
             updateTable(selectedLabels);
             // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
