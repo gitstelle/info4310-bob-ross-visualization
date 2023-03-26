@@ -14,14 +14,16 @@
 
     <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
 
+    <svg id="bubbles" height="350" width="100%"></svg>
 
     <div class="container">
+
         <div class="iconCont">
             <div class="icons">
                 <h3>Click to make a painting!</h3>
 
             </div>
-            <div id = resetContainer></div>
+            <div id=resetContainer></div>
             <div class="frame_toggle">
                 <h4> frame your work? </h4>
                 <label class="switch">
@@ -33,8 +35,7 @@
         </div>
 
         <div class="left">
-            <div class = "overview">
-                <svg id="bubbles" height="350" width="100%"></svg>
+            <div class="overview">
 
             </div>
 
@@ -46,8 +47,8 @@
 
         <div class="right">
             <div class="tutorials_head">
-                <h3 id = 'containing'></h3>
-                <h4 id = 'percentage'></h4>
+                <h3 id='containing'></h3>
+                <h4 id='percentage'></h4>
                 <!-- <span class="percentage"></span> <span style="font-size: 20px;"></span> -->
 
             </div>
@@ -88,9 +89,9 @@
         const bubblesWidth = canvasWidth - bubblesmargin.left - bubblesmargin.right;
         const bubblesHeight = canvasHeight - bubblesmargin.top - bubblesmargin.bottom;
         const bubblesselector = bubblessvg.append("g")
-                            .attr("transform","translate("+bubblesmargin.left+","+bubblesmargin.top+")");
+            .attr("transform", "translate(" + bubblesmargin.left + "," + bubblesmargin.top + ")");
 
-        
+
         const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
         const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([30, 45]);
         const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
@@ -102,9 +103,9 @@
             .data(bob_ross_counts)
             .join("g")
             .attr("id", "bubble")
-            .attr("transform", `translate(${0},${-bubblesHeight/4})`)
-            // .on('mouseover', mouseEntersBubble)
-            // .on('mouseout', mouseLeavesBubble);
+            .attr("transform", `translate(${0},${-bubblesHeight / 4})`)
+        // .on('mouseover', mouseEntersBubble)
+        // .on('mouseout', mouseLeavesBubble);
 
         let blabels = packedbubble.append("text")
             .attr("id", "blabel")
@@ -115,11 +116,11 @@
             .attr("font-weight", "bold")
             .attr("fill", 'white')
             .attr('pointer-events', 'none')
-            // .attr("transform", `translate(${0},${-10})`)
+        // .attr("transform", `translate(${0},${-10})`)
 
-            //on click: 
-            // transform translate blabels .attr("transform", `translate(${0},${-10})`)
-            // make blabels_percent visible
+        //on click: 
+        // transform translate blabels .attr("transform", `translate(${0},${-10})`)
+        // make blabels_percent visible
 
         let blabels_percent = packedbubble.append("text")
             .attr("id", "blabel_percent")
@@ -143,14 +144,14 @@
             .attr("stroke", "none")
             .style("stroke-width", 0)
             .attr('r', d => bubbleScale(d.count));
-            // .on("mouseover", function () {
-            //     thisBubble = d3.select(this);
-            //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
-            // })
-            // .on("mouseout", function () {
-            //     thisBubble = d3.select(this);
-            //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
-            // });
+        // .on("mouseover", function () {
+        //     thisBubble = d3.select(this);
+        //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
+        // })
+        // .on("mouseout", function () {
+        //     thisBubble = d3.select(this);
+        //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
+        // });
 
 
 
@@ -426,11 +427,8 @@
         f1Buttons.append('h4').text(d => d.label)
 
 
-        // bob icon
-        // f1div.append('img')
-        //     .attr('width', 60)
-        //     .attr('height', 60)
-        //     .attr("src", "icons/bob.png")
+        // reset button
+        f1div.append('button').attr('class', 'iconButton').attr('id', 'resetButton').on('click', resetCanvas).append('h4').text("erase entire canvas")
 
 
 
@@ -439,7 +437,7 @@
             canvas.selectAll('image').attr("visibility", "hidden");
             canvas.style("background-color", "#d8d0c1");
             f1Buttons.classed('buttonUnclicked', true)
-            f1Buttons.classed('buttonClicked',false)
+            f1Buttons.classed('buttonClicked', false)
             selectedLabels = [];
             updateTable(selectedLabels);
             // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
@@ -452,8 +450,8 @@
             console.log(d3.select(this).datum().label)
             button = d3.select(this)
             // button.style('background-color', '#fcf8cc')
-            button.attr('class','iconButton buttonClicked')
-            button.classed('buttonUnclicked',false)
+            button.attr('class', 'iconButton buttonClicked')
+            button.classed('buttonUnclicked', false)
 
             // label
             buttonClicked = d3.select(this).datum().label;
@@ -462,17 +460,17 @@
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
-                
+
                 // probably call a function here to draw on the canvas
             }
             // if it is not in selectedLabels, remove it from the array
             // reset button bg color
             if (buttonClickedIndex > -1) {
                 selectedLabels.splice(buttonClickedIndex, 1);
-                
-                button.classed('buttonClicked',false)
-                button.attr('class','iconButton buttonUnclicked')
-                
+
+                button.classed('buttonClicked', false)
+                button.attr('class', 'iconButton buttonUnclicked')
+
                 console.log(button);
 
                 // button.style("background-color", "white")
@@ -626,10 +624,31 @@
 
                     // }
                 )
-            console.log(tableRows)
-        }
-    }
 
+            containsLabel = d3.select('#containing')
+            percentageLabel = d3.select('#percentage')
+
+            if (selectedLabels.length != 0) {
+                contains = "Your painting containing:" + elementsText.slice(0, -1)
+                percent = 'can be found in ' + ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
+
+                // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+                containsLabel.text(contains)
+                percentageLabel.text(percent)
+
+            }
+
+            else {
+
+                containsLabel.text('All 403 Bob Ross paintings from 31 seasons:')
+                percentageLabel.text('Make a painting to filter these episodes by element!')
+            }
+
+
+        }
+        updateTable([]);
+    }
     getData();
 
 </script>
