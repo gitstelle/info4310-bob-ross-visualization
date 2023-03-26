@@ -95,7 +95,7 @@
         canvas.append("svg:image")
             .attr("class", "beach_drawing")
             .attr("x", 0)
-            .attr("y", 215)
+            .attr("y", 190)
             .attr("xlink:href", "canvas_final/beach.png")
             .attr("visibility", "hidden")
 
@@ -104,7 +104,7 @@
         canvas.append("svg:image")
             .attr("class", "lake_drawing")
             .attr("x", 0)
-            .attr("y", 330)
+            .attr("y", 300)
             .attr("xlink:href", "canvas_final/lake.png")
             .attr("visibility", "hidden")
 
@@ -389,13 +389,15 @@
 
 
         // reset button
-        f1div.append('button').attr('class', 'iconButton').attr('id', 'resetButton').append('h4').text("erase canvas").on('click', resetCanvas)
+        f1div.append('button').attr('class', 'iconButton').attr('id', 'resetButton').on('click', resetCanvas).append('h4').text("erase canvas")
 
 
 
         function resetCanvas() {
-
-            drawPoints(data);
+            canvas.selectAll(className).attr("visibility", "hidden");
+            f1Buttons.style('background-color', 'white')
+            selectedLabels = [];
+            updateTable(selectedLabels);
             // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
 
         }
@@ -424,6 +426,9 @@
                 // button.classed('buttonClicked',false)
                 // button.classed('buttonUnclicked',true)
                 console.log(button);
+                console.log('buttonClicked')
+
+
                 button.style("background-color", "white")
                     // idk whyy but the css hover disappears afte
                     .on("mouseover", function () {
@@ -433,20 +438,20 @@
                         button.style("background-color", "white")
                     })
 
-                // probably call a function here to remove it from the canvas
+                // REMOVE DRAWING FROM CANVAS
+                canvas.select('.' + buttonClicked + '_drawing').attr("visibility", "hidden");
+                if (buttonClicked == 'night') {
+                    canvas.style("background-color", "#EEEEEE")
+                }
             }
 
             console.log('selectedLabels');
             console.log(selectedLabels);
 
 
-
             drawIcon(selectedLabels);
             updateTable(selectedLabels);
         }
-
-
-        canvas.style("background-color", "#EEEEEE")
 
         function drawIcon(selectedButtons) {
             //should this function filter out the original dataset to just include the rows with that element?
@@ -539,7 +544,7 @@
 
                     cell.append("img")
                         .attr("class", "cell_image")
-                        .attr("src", d => 'paintings/' + d.episode + '.jpg');
+                        .attr("src", d => 'paintings/' + d.episode + '.jpeg');
 
                     cell.append("text")
                         .text(d => "Title: " + d.title)
