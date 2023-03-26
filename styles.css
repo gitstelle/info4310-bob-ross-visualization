@@ -97,12 +97,12 @@ h4#percentage {
 }
 
 button:hover {
-  background-color: #fff3b6;
+  background-color: #efdf8d;
   transform: translateX(5px);
 }
 
 .buttonClicked {
-  background-color: #fcf8cc;
+  background-color: #efdf8d;
 }
 
 .buttonUnclicked {
