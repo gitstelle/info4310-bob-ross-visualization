@@ -277,7 +277,7 @@
 
 
         canvas.selectAll("image")
-            .on("mouseover", mouseEntersDrawing())
+            .on("mouseover", mouseEntersDrawing)
             .on("mouseout", mouseLeavesDrawing)
 
 
@@ -306,7 +306,7 @@
             let xPos = d3.select(this).attr('x');
             let yPos = d3.select(this).attr('y');
 
-            tooltip.attr("transform", `translate(${(d3.pointer(event)[0])},${d3.pointer(event)[1]})`);
+            tooltip.attr("transform", `translate(${(xPos)},${yPos})`);
 
         }
 
