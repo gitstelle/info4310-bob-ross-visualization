@@ -6,8 +6,8 @@ html {
 body {
     margin-top: 2%;
     margin-bottom: 2%;
-    margin-right: 5%;
-    margin-left: 5%;
+    margin-right: 2%;
+    margin-left: 2%;
     background-color: #04a7de;
     color:white;
     cursor: url("paint-brush.png"), auto;
@@ -16,10 +16,10 @@ body {
 #canvas {
   background-color: #fffcf8;
 }
-/* 
-h1 {
-    text-align: center;
-} */
+
+h3 {
+  text-align: center;
+}
 
 #quote {
   font-style: italic;
@@ -35,14 +35,12 @@ h1 {
     height:150vh;
 }
 
-.icons {
-    max-height: 30%;
-    width: 800px;
+.iconCont {
+    min-width: 220px;
+    max-height: 700px;
     display: flex;
     flex-wrap: wrap;
-    /* margin-right: auto; */
-    margin-left: 7%;
-    justify-content: center;
+    margin-right:20px;
 }
 
 .canvas {
@@ -54,18 +52,17 @@ h1 {
 } */
 
 .frame_toggle {
-    width:800;
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    /* margin-left: auto; */
-    /* margin-right: auto; */
-    margin-left: 7%;
-    margin-bottom: 20px;
+  min-width: 220px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
 .frame_toggle h4{
+  /* display:inline; */
   text-align: center;
+  padding:0;
   /* margin-right: 10px; */
 }
 
@@ -77,10 +74,10 @@ h1 {
     cursor: pointer;
 }
 
-.icons button {
+.iconButton {
     /* margin:5px; */
-    width:70px;
-    height:70px;
+    width:63px;
+    height:63px;
     margin:5px;
     border: none;
     border-radius: 10%;
@@ -89,13 +86,11 @@ h1 {
     /* color:white; */
     cursor: url("paint-brush.png"), auto;
     transition: all 0.3s ease 0s;
-
-
 }
 
-.icons button:hover {
+button:hover {
   background-color: #fff3b6;
-  transform: translateY(-5px);
+  transform: translateX(5px);
 }
 
 .buttonClicked {
@@ -105,12 +100,26 @@ h1 {
 /* .buttonUnclicked {
   background-color: white;
 } */
+#resetButton {
+  /* padding-top: -10px; */
+  background-color:rgb(250, 136, 155);
+  transition: all .3s;
+}
+
+#resetButton h4{
+color:rgb(83, 29, 73)
+}
+
+#resetButton:hover {
+  background-color: #fff3b6;
+}
+
 
 .icons h4 {
     margin:0;
     font-weight: normal;
     font-family: 'Trebuchet MS';
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
     color:#02475f;
     font-weight: bold;
@@ -203,6 +212,7 @@ h1 {
   .right {
     overflow-y:auto;
     height:700px;
+    min-width: 300px;
 
     flex-grow: 1;
 
