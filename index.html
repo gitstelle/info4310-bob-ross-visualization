@@ -41,7 +41,9 @@
 
         <div class="right">
             <div class="tutorials_head">
-                <span class="percentage"></span> <span style="font-size: 20px;">Tutorials</span>
+                <h3 id = 'containing'></h3>
+                <h4 id = 'percentage'></h4>
+                <!-- <span class="percentage"></span> <span style="font-size: 20px;"></span> -->
 
             </div>
             <div class="elements" id="elements"></div>
@@ -265,8 +267,8 @@
                     .style("fill", "none")
                     .style("stroke-width", 20);
 
-                // add "framed" to selectedLabels to update the table
-                selectedLabels.push("framed")
+                // add "frame" to selectedLabels to update the table
+                selectedLabels.push("frame")
                 updateTable(selectedLabels);
 
 
@@ -274,7 +276,7 @@
             else {
                 //turn the frame off, if there is one
                 canvas.selectAll('.frame').remove();
-                selectedLabels.splice("framed")
+                selectedLabels.splice("frame")
                 updateTable(selectedLabels);
             }
         })
@@ -434,15 +436,30 @@
 
             })
 
+            containsLabel = d3.select('#containing')
 
-            percentage = ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '%';
+            percentageLabel = d3.select('#percentage')
 
-            console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
-
-            d3.select(".percentage").append('text').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+            contains = "Your painting containing:"+ elementsText.slice(0,-1)
 
 
-            // d3.select(".tutorials_head").append('h2').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+            percent = 'can be found in '+((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
+
+            // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+            containsLabel.text(contains)
+
+            percentageLabel.text(percent)
+
+
+            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+
+    
+
+            // d3.select(".percentage").append('h3').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+
+
+            // d3.select(".tutorials_head").append('text').attr("class", "tutorials_percent").text(percentage + " Tutorials");
 
 
 
@@ -455,7 +472,7 @@
 
 
 
-            d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
 
             // First make table rows for each point using a data join 
             var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
