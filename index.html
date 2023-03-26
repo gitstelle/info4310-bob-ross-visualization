@@ -122,17 +122,17 @@
         // transform translate blabels .attr("transform", `translate(${0},${-10})`)
         // make blabels_percent visible
 
-        // let blabels_percent = packedbubble.append("text")
-        //     .attr("id", "blabel_percent")
-        //     .attr("text-anchor", "middle")
-        //     .attr("dominant-baseline", "middle")
-        //     .attr("dy", ".35em")
-        //     .attr("font-size", "16px")
-        //     .attr("font-weight", "bold")
-        //     .attr("fill", 'white')
-        //     .attr('pointer-events', 'none')
-        //     .attr("transform", `translate(${0},${10})`)
-        //     .attr("visibility", "hidden")
+        let blabels_percent = packedbubble.append("text")
+            .attr("id", "blabel_percent")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "16px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+            .attr("transform", `translate(${0},${10})`)
+            .attr("visibility", "hidden")
 
 
 
@@ -177,13 +177,13 @@
                     .attr("width", "20")
                     .text(d => d.element)
 
-                // blabels_percent.attr("x", d => Math.min(bubblesWidth, d.x))
-                //     .attr("y", d => Math.min(bubblesHeight, d.y))
-                //     .attr("width", "20")
-                //     .text(d => ((Number(d.count)/bob_ross.length) * 100).toFixed(1) + '%')
+                blabels_percent.attr("x", d => Math.min(bubblesWidth, d.x))
+                    .attr("y", d => Math.min(bubblesHeight, d.y))
+                    .attr("width", "20")
+                    .text(d => ((Number(d.count) / bob_ross.length) * 100).toFixed(1) + '%')
 
                 blabels.raise()
-                // blabels_percent.raise()
+                blabels_percent.raise()
             });
         while (bubblesim.alpha() > 0.001) {
             bubblesim.tick()
@@ -420,6 +420,9 @@
         var prevBub = null; // use this to move it back
         var prevBubR = null; // use this shrink back
 
+        var prevblabel = null;
+        var prevblabel_percent = null;
+
 
         function iconClicked() {
 
@@ -477,6 +480,14 @@
                 console.log(prevBubble)
                 prevBubR.transition().duration(600).attr("r", prevBubble.rad)
                 prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 3)})`)
+
+                // thisblabel = d3.select(filteredBubble[0].children[1])
+                prevblabel.attr("transform", `translate(${0},${0})`);
+
+                // thisblabel_percent = d3.select(filteredBubble[0].children[2])
+
+                prevblabel_percent.attr("visibility", "hidden");
+
             }
 
 
@@ -489,6 +500,15 @@
                 // increase radius
                 d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
 
+                thisblabel = d3.select(filteredBubble[0].children[1])
+                thisblabel.attr("transform", `translate(${0},${-10})`)
+
+                thisblabel_percent = d3.select(filteredBubble[0].children[2])
+
+                thisblabel_percent.attr("visibility", "visible")
+
+
+
                 // save bubble info, to move it back
 
                 prevBubble.x = xpos;
@@ -496,6 +516,10 @@
                 prevBubble.rad = rad;
                 prevBub = thisBubble;
                 prevBubR = d3.select(filteredBubble[0].children[0]);
+
+                prevblabel = d3.select(filteredBubble[0].children[1]);
+
+                prevblabel_percent = d3.select(filteredBubble[0].children[2]);
 
             }
             // if it is not in selectedLabels, remove it from the array
