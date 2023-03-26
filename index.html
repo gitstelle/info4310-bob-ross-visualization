@@ -533,7 +533,7 @@
             console.log('filteredBubble')
             console.log(filteredBubble[0])
 
-            console.log(d3.select(filteredBubble[0]))
+            console.log(d3.select(filteredBubble[0]).datum().x)
 
             // d3.select(filteredBubble[0]) : ENTIRE NODE
             // d3.select(filteredBubble[0].children[0]) :circle
@@ -548,12 +548,21 @@
 
             // filteredBubble[0].attr("x", 1000)
 
+            fixedPosx = 1000
+            fixedPosy = 0
+
             thisBubble = d3.select(filteredBubble[0])
+
+            // to get the current x position of the gtag: d3.select(filteredBubble[0]).datum().x
+            // to get the current y position of the gtag: d3.select(filteredBubble[0]).datum().y
+
+
 
             // 350/2 - y 
             // 1000 - x
 
             thisBubble.attr("transform", `translate(${750},${-350/2})`)
+            thisBubble.attr("x")
             d3.select(filteredBubble[0].children[0]).attr("r", 100)
             
             // thisBubble.attr("x", 1000)
