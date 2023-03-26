@@ -14,7 +14,7 @@
 
     <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
 
-    <svg id="bubbles" height="350" width="100%"></svg>
+    <svg id="bubbles" height="250" width="100%"></svg>
 
     <div class="container">
 
@@ -85,7 +85,7 @@
         const bubblessvg = d3.select("svg#bubbles");
         const bubbleswidth = bubblessvg.attr("width");
         const bubblesheight = bubblessvg.attr("height");
-        const bubblesmargin = { top: 10, right: 10, bottom: 10, left: 10 };
+        const bubblesmargin = { top: 0, right: 0, bottom: 0, left: 0 };
         const bubblesWidth = canvasWidth - bubblesmargin.left - bubblesmargin.right;
         const bubblesHeight = canvasHeight - bubblesmargin.top - bubblesmargin.bottom;
         const bubblesselector = bubblessvg.append("g")
@@ -93,8 +93,8 @@
 
 
         const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
-        const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([30, 45]);
-        const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
+        const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([15, 30]);
+        // const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
         var bubblecolorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.map(bob_ross_counts, d => d.element))
 
         // const bubblesselector = bubblessvg.append("g");
@@ -103,7 +103,7 @@
             .data(bob_ross_counts)
             .join("g")
             .attr("id", "bubble")
-            .attr("transform", `translate(${0},${-bubblesHeight / 4})`)
+            .attr("transform", `translate(${0},${-bubblesHeight / 3})`)
         // .on('mouseover', mouseEntersBubble)
         // .on('mouseout', mouseLeavesBubble);
 
@@ -143,7 +143,7 @@
             .attr("fill", d => bubblecolorScale(d.element))
             .attr("stroke", "none")
             .style("stroke-width", 0)
-            .attr('r', d => bubbleScale(d.count));
+            .attr('r', d => bubbleScale(d.count))
         // .on("mouseover", function () {
         //     thisBubble = d3.select(this);
         //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
@@ -185,14 +185,13 @@
                 blabels.raise()
                 // blabels_percent.raise()
             });
-        while (bubblesim.alpha() > 0.01) {
+        while (bubblesim.alpha() > 0.001) {
             bubblesim.tick()
         }
 
 
         console.log('packedBubble')
         console.log(packedbubble);
-
 
         var selectedLabels = [];
 
@@ -205,15 +204,12 @@
             .attr("xlink:href", "canvas_final/sun.png")
             .attr("visibility", "hidden")
 
-
         canvas.append("svg:image")
             .attr("class", "ocean_drawing")
             .attr("x", 0)
             .attr("y", 170)
             .attr("xlink:href", "canvas_final/ocean.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "beach_drawing")
@@ -222,17 +218,12 @@
             .attr("xlink:href", "canvas_final/beach.png")
             .attr("visibility", "hidden")
 
-
-
         canvas.append("svg:image")
             .attr("class", "lake_drawing")
             .attr("x", 0)
             .attr("y", 300)
             .attr("xlink:href", "canvas_final/lake.png")
             .attr("visibility", "hidden")
-
-
-
 
         canvas.append("svg:image")
             .attr("class", "river_drawing")
@@ -241,16 +232,12 @@
             .attr("xlink:href", "canvas_final/river.png")
             .attr("visibility", "hidden")
 
-
-
         canvas.append("svg:image")
             .attr("class", "mountain_drawing")
             .attr("x", 0)
             .attr("y", 120)
             .attr("xlink:href", "canvas_final/mountain.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "waterfall_drawing")
@@ -259,15 +246,12 @@
             .attr("xlink:href", "canvas_final/waterfall.png")
             .attr("visibility", "hidden")
 
-
         canvas.append("svg:image")
             .attr("class", "tree_drawing")
             .attr("x", 65)
             .attr("y", 270)
             .attr("xlink:href", "canvas_final/tree.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "path_drawing")
@@ -276,16 +260,12 @@
             .attr("xlink:href", "canvas_final/path.png")
             .attr("visibility", "hidden")
 
-
-
         canvas.append("svg:image")
             .attr("class", "building_drawing")
             .attr("x", 680)
             .attr("y", 280)
             .attr("xlink:href", "canvas_final/building.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "bridge_drawing")
@@ -294,15 +274,12 @@
             .attr("xlink:href", "canvas_final/bridge.png")
             .attr("visibility", "hidden")
 
-
         canvas.append("svg:image")
             .attr("class", "bushes_drawing")
             .attr("x", 600)
             .attr("y", 520)
             .attr("xlink:href", "canvas_final/bushes.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "rocks_drawing")
@@ -311,15 +288,12 @@
             .attr("xlink:href", "canvas_final/rocks.png")
             .attr("visibility", "hidden")
 
-
         canvas.append("svg:image")
             .attr("class", "fence_drawing")
             .attr("x", 691)
             .attr("y", 445)
             .attr("xlink:href", "canvas_final/fence.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "clouds_drawing")
@@ -328,7 +302,6 @@
             .attr("xlink:href", "canvas_final/clouds.png")
             .attr("visibility", "hidden")
 
-
         canvas.append("svg:image")
             .attr("class", "flowers_drawing")
             .attr("x", 0)
@@ -336,16 +309,12 @@
             .attr("xlink:href", "canvas_final/flowers.png")
             .attr("visibility", "hidden")
 
-
-
         canvas.append("svg:image")
             .attr("class", "fog_drawing")
             .attr("x", 720)
             .attr("y", 115)
             .attr("xlink:href", "canvas_final/fog.png")
             .attr("visibility", "hidden")
-
-
 
         canvas.append("svg:image")
             .attr("class", "grass_drawing")
@@ -360,7 +329,6 @@
             .attr("y", 30)
             .attr("xlink:href", "canvas_final/snow.png")
             .attr("visibility", "hidden")
-
 
         d3.select('.switch').on("change", function () {
             selected = d3.select("#toggle")._groups[0][0].checked;
@@ -389,7 +357,6 @@
                 // add "frame" to selectedLabels to update the table
                 selectedLabels.push("frame")
                 updateTable(selectedLabels);
-
 
             }
             else {
@@ -448,14 +415,22 @@
 
         }
 
+        // store this info to move the previous bubble back
+        var prevBubble = { x: 0, y: 0, rad: 0 };
+
+
         function iconClicked() {
+
+
+
+
             // blabels_percent.attr("visibility", "hidden")
             // blabels.attr("transform", `translate(${0},${+10})`)
 
             // bubblenode.forEach((d)=>{
             //         d3.select(d).transition(100).attr("r", (bubbleScale(d3.select(d).datum().count)))
             // })
-            
+
 
             // thisBubble = d3.select(this);
             //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
@@ -464,9 +439,9 @@
             // Reset all the bubbles to the original size
             // Reset text2 to hidden
             // Move element label back to center
-            console.log('triggered')
-            console.log('iconClicked2')
-            console.log(d3.select(this).datum().label)
+            // console.log('triggered')
+            // console.log('iconClicked2')
+            // console.log(d3.select(this).datum().label)
             button = d3.select(this)
             // button.style('background-color', '#fcf8cc')
             button.attr('class', 'iconButton buttonClicked')
@@ -476,11 +451,48 @@
             buttonClicked = d3.select(this).datum().label;
             buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
 
+
+            // bubble info
+            filteredBubble = packedbubble._groups[0].filter(d => d3.select(d).data()[0].element === buttonClicked)
+            console.log('filteredBubble', filteredBubble)
+            fixedPosx = 1100
+            fixedPosy = 250 / 2
+
+            thisBubble = d3.select(filteredBubble[0])
+            console.log('thisBubble', thisBubble)
+
+            xpos = d3.select(filteredBubble[0]).datum().x
+            ypos = d3.select(filteredBubble[0]).datum().y
+            // rad = filteredBubble[0].firstChild.r
+            rad = bubbleScale(thisBubble.datum().count);
+
+            // dec radius
+            d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", prevBubble.rad)
+            
+            // move bubble back
+            console.log('wow')
+            console.log(prevBubble)
+            thisBubble.transition().duration(400).attr("transform", `translate(${(fixedPosx-prevBubble.x)*-1},${(fixedPosy-prevBubble.y)*-1})`)     
+            
+            
+
+
+
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
 
-                // probably call a function here to draw on the canvas
+                // move bubble
+                thisBubble.transition().duration(400).attr("transform", `translate(${fixedPosx - xpos},${fixedPosy - ypos})`)
+                // increase radius
+                d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
+
+                // save bubble info, to move it back
+
+                prevBubble.x = xpos;
+                prevBubble.y = ypos;
+                prevBubble.rad = rad;
+
             }
             // if it is not in selectedLabels, remove it from the array
             // reset button bg color
@@ -506,6 +518,8 @@
                 if (buttonClicked == 'night') {
                     canvas.style("background-color", "#d8d0c1")
                 }
+
+
             }
 
             console.log('selectedLabels HERE');
@@ -519,14 +533,11 @@
             // packedbubble._groups[0].forEach((d)=> {
             //     console.log('hello')
             //     console.log(d3.select(d).data())
-            // })
-            
-
-            filteredBubble = packedbubble._groups[0].filter(d => d3.select(d).data()[0].element === buttonClicked)
+            // }
 
 
 
-        
+
 
 
             // filteredBubble = packedbubble.data().filter(d => d['element'] == buttonClicked)
@@ -540,7 +551,7 @@
             // d3.select(filteredBubble[0].children[1]) :blabel
             // d3.select(filteredBubble[0].children[2]) : blabel_percent
             // d3.select(filtered)
-           
+
             // 1. make circle bigger
             // filteredBubble[0].children[0] - this is the 
 
@@ -548,23 +559,9 @@
 
             // filteredBubble[0].attr("x", 1000)
 
-            fixedPosx = 1000
-            fixedPosy = 0
-
-            thisBubble = d3.select(filteredBubble[0])
-
-            // to get the current x position of the gtag: d3.select(filteredBubble[0]).datum().x
-            // to get the current y position of the gtag: d3.select(filteredBubble[0]).datum().y
 
 
 
-            // 350/2 - y 
-            // 1000 - x
-
-            thisBubble.attr("transform", `translate(${750},${-350/2})`)
-            thisBubble.attr("x")
-            d3.select(filteredBubble[0].children[0]).attr("r", 100)
-            
             // thisBubble.attr("x", 1000)
             // thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
 
@@ -644,10 +641,10 @@
 
             percentageLabel = d3.select('#percentage')
 
-            contains = "Your painting containing all of the following:"+ elementsText.slice(0,-1)
+            contains = "Your painting containing all of the following:" + elementsText.slice(0, -1)
 
- 
-            percent = 'can be found in '+((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
+
+            percent = 'can be found in ' + ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
 
             // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
 
@@ -658,7 +655,7 @@
 
             // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
 
-    
+
 
             // d3.select(".percentage").append('h3').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
 
@@ -735,7 +732,7 @@
 
 
         }
-        updateTable([]);
+        updateTable(selectedLabels);
     }
     getData();
 
