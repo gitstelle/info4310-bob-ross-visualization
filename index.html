@@ -331,8 +331,9 @@
             console.log('iconClicked2')
             console.log(d3.select(this).datum().label)
             button = d3.select(this)
-            button.style('background-color', '#fcf8cc')
-            console.log('debug')
+            // button.style('background-color', '#fcf8cc')
+            button.attr('class','iconButton buttonClicked')
+            button.classed('buttonUnclicked',false)
 
             // label
             buttonClicked = d3.select(this).datum().label;
@@ -341,28 +342,27 @@
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
-                // button.attr('class','buttonClicked')
+                
                 // probably call a function here to draw on the canvas
             }
             // if it is not in selectedLabels, remove it from the array
             // reset button bg color
             if (buttonClickedIndex > -1) {
                 selectedLabels.splice(buttonClickedIndex, 1);
-                // button.classed('buttonClicked',false)
-                // button.classed('buttonUnclicked',true)
+                
+                button.classed('buttonClicked',false)
+                button.attr('class','iconButton buttonUnclicked')
+                
                 console.log(button);
 
-                button.style("background-color", "white")
-                    // idk whyy but the css hover disappears afte
-                    .on("mouseover", function () {
-                        button.style("background-color", "#fcf8cc")
-                    })
-                    .on("mouseout", function () {
-                        button.style("background-color", "white")
-                    })
-                    .on("click", function () {
-                        button.style("background-color", "#fcf8cc")
-                    })
+                // button.style("background-color", "white")
+                //     // idk whyy but the css hover disappears afte
+                //     .on("mouseover", function () {
+                //         button.style("background-color", "#fcf8cc")
+                //     })
+                //     .on("mouseout", function () {
+                //         button.style("background-color", "white")
+                //     })
 
                 // REMOVE DRAWING FROM CANVAS
                 canvas.select('.' + buttonClicked + '_drawing').attr("visibility", "hidden");
