@@ -1,0 +1,770 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+</head>
+
+<body>
+    <h1>The Works of Bob Ross</h1>
+    <p id=quote><q>We don't make mistakes, just happy little accidents.</q></p>
+
+
+
+    <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
+
+    <svg id="bubbles" height="250" width="100%"></svg>
+
+    <div class="container">
+
+        <div class="iconCont">
+            <div class="icons">
+                <h3>Click to make a painting!</h3>
+
+            </div>
+            <div id=resetContainer></div>
+            <div class="frame_toggle">
+                <h4> frame your work? </h4>
+                <label class="switch">
+                    <input type="checkbox" id="toggle" value="true" name="toggles">
+                    <span class="slider round">
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="left">
+            <div class="overview">
+
+            </div>
+
+            <div class="canvas">
+                <!-- <h2>Canvas</h2> -->
+                <svg id="canvas" width=1000 height=700></svg>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="tutorials_head">
+                <h3 id='containing'></h3>
+                <h4 id='percentage'></h4>
+                <!-- <span class="percentage"></span> <span style="font-size: 20px;"></span> -->
+
+            </div>
+            <div class="elements" id="elements"></div>
+            <div class="tutorials">
+                <table id="episode-table">
+                    <thead>
+                        <!-- <th style="width: 170px">Episode</th> -->
+                        <th id="column"></th>
+                        <!-- <th id="column">Episode</th> -->
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<script>
+    const getData = async function () {
+
+        let bob_ross = await d3.csv("bob_ross.csv", d3.autotype);
+        let bob_ross_counts = await d3.csv("bob_ross_counts.csv", d3.autotype);
+
+        console.log(bob_ross);
+        console.log(bob_ross_counts);
+
+
+        const canvas = d3.select("svg#canvas")
+        const canvasHeight = canvas.attr("height")
+        const canvasWidth = canvas.attr("width")
+
+
+        const bubblessvg = d3.select("svg#bubbles");
+        const bubbleswidth = bubblessvg.attr("width");
+        const bubblesheight = bubblessvg.attr("height");
+        const bubblesmargin = { top: 0, right: 0, bottom: 0, left: 0 };
+        const bubblesWidth = canvasWidth - bubblesmargin.left - bubblesmargin.right;
+        const bubblesHeight = canvasHeight - bubblesmargin.top - bubblesmargin.bottom;
+        const bubblesselector = bubblessvg.append("g")
+            .attr("transform", "translate(" + bubblesmargin.left + "," + bubblesmargin.top + ")");
+
+
+        const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
+        const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([15, 30]);
+        // const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
+        var bubblecolorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.map(bob_ross_counts, d => d.element))
+
+        // const bubblesselector = bubblessvg.append("g");
+
+        packedbubble = bubblesselector.selectAll('g.bubble')
+            .data(bob_ross_counts)
+            .join("g")
+            .attr("id", "bubble")
+            .attr("transform", `translate(${0},${-bubblesHeight / 3})`)
+        // .on('mouseover', mouseEntersBubble)
+        // .on('mouseout', mouseLeavesBubble);
+
+        let blabels = packedbubble.append("text")
+            .attr("id", "blabel")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "16px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+        // .attr("transform", `translate(${0},${-10})`)
+
+        //on click: 
+        // transform translate blabels .attr("transform", `translate(${0},${-10})`)
+        // make blabels_percent visible
+
+        let blabels_percent = packedbubble.append("text")
+            .attr("id", "blabel_percent")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "16px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+            .attr("transform", `translate(${0},${10})`)
+            .attr("visibility", "hidden")
+
+
+
+        var bubblenode = packedbubble.append("circle")
+            .attr("class", "bubbles")
+            .attr('cx', 0)
+            .attr('cy', bubblesHeight / 2)
+            .attr("fill", d => bubblecolorScale(d.element))
+            .attr("stroke", "none")
+            .style("stroke-width", 0)
+            .attr('r', d => bubbleScale(d.count))
+        // .on("mouseover", function () {
+        //     thisBubble = d3.select(this);
+        //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
+        // })
+        // .on("mouseout", function () {
+        //     thisBubble = d3.select(this);
+        //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
+        // });
+
+
+
+        var bubblesim = d3.forceSimulation()
+            .nodes(bob_ross_counts)
+            .force("center", d3.forceCenter()
+                .x(bubblesWidth / 2)
+                .y(bubblesHeight / 2))
+            .force("repulse", d3.forceManyBody()
+                .strength(0.005))
+            .force("collision", d3.forceCollide()
+                .radius(d => (bubbleScale(d.count) + 3))
+                .iterations(1))
+            .force("xpos", d3.forceX()
+                .strength(0.025))
+            .force("ypos", d3.forceY()
+                .strength(0.5))
+            .on("tick", function (d) {
+                bubblenode.attr("cx", d => Math.min(bubblesWidth, d.x))
+                    .attr("cy", d => Math.min(bubblesHeight, d.y))
+                blabels.attr("x", d => Math.min(bubblesWidth, d.x))
+                    .attr("y", d => Math.min(bubblesHeight, d.y))
+                    .attr("width", "20")
+                    .text(d => d.element)
+
+                blabels_percent.attr("x", d => Math.min(bubblesWidth, d.x))
+                    .attr("y", d => Math.min(bubblesHeight, d.y))
+                    .attr("width", "20")
+                    .text(d => ((Number(d.count) / bob_ross.length) * 100).toFixed(1) + '%')
+
+                blabels.raise()
+                blabels_percent.raise()
+            });
+        while (bubblesim.alpha() > 0.001) {
+            bubblesim.tick()
+        }
+
+
+        console.log('packedBubble')
+        console.log(packedbubble);
+
+        var selectedLabels = [];
+
+        canvas.style("background-color", "#d8d0c1")
+
+        canvas.append("svg:image")
+            .attr("class", "sun_drawing")
+            .attr("x", 870)
+            .attr("y", 15)
+            .attr("xlink:href", "canvas_final/sun.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "ocean_drawing")
+            .attr("x", 0)
+            .attr("y", 170)
+            .attr("xlink:href", "canvas_final/ocean.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "beach_drawing")
+            .attr("x", 0)
+            .attr("y", 190)
+            .attr("xlink:href", "canvas_final/beach.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "lake_drawing")
+            .attr("x", 0)
+            .attr("y", 300)
+            .attr("xlink:href", "canvas_final/lake.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "river_drawing")
+            .attr("x", 0)
+            .attr("y", 410)
+            .attr("xlink:href", "canvas_final/river.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "mountain_drawing")
+            .attr("x", 0)
+            .attr("y", 120)
+            .attr("xlink:href", "canvas_final/mountain.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "waterfall_drawing")
+            .attr("x", 0)
+            .attr("y", 195)
+            .attr("xlink:href", "canvas_final/waterfall.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "tree_drawing")
+            .attr("x", 65)
+            .attr("y", 270)
+            .attr("xlink:href", "canvas_final/tree.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "path_drawing")
+            .attr("x", 649)
+            .attr("y", 447)
+            .attr("xlink:href", "canvas_final/path.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "building_drawing")
+            .attr("x", 680)
+            .attr("y", 280)
+            .attr("xlink:href", "canvas_final/building.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "bridge_drawing")
+            .attr("x", 260)
+            .attr("y", 450)
+            .attr("xlink:href", "canvas_final/bridge.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "bushes_drawing")
+            .attr("x", 600)
+            .attr("y", 520)
+            .attr("xlink:href", "canvas_final/bushes.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "rocks_drawing")
+            .attr("x", 600)
+            .attr("y", 565)
+            .attr("xlink:href", "canvas_final/rocks.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "fence_drawing")
+            .attr("x", 691)
+            .attr("y", 445)
+            .attr("xlink:href", "canvas_final/fence.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "clouds_drawing")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("xlink:href", "canvas_final/clouds.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "flowers_drawing")
+            .attr("x", 0)
+            .attr("y", 556)
+            .attr("xlink:href", "canvas_final/flowers.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "fog_drawing")
+            .attr("x", 720)
+            .attr("y", 115)
+            .attr("xlink:href", "canvas_final/fog.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "grass_drawing")
+            .attr("x", 0)
+            .attr("y", 633)
+            .attr("xlink:href", "canvas_final/grass.png")
+            .attr("visibility", "hidden")
+
+        canvas.append("svg:image")
+            .attr("class", "snow_drawing")
+            .attr("x", 30)
+            .attr("y", 30)
+            .attr("xlink:href", "canvas_final/snow.png")
+            .attr("visibility", "hidden")
+
+        d3.select('.switch').on("change", function () {
+            selected = d3.select("#toggle")._groups[0][0].checked;
+            if (selected) {
+                // referenced: https://gist.github.com/andrewStaroscik/5222370
+                // toggle is on, create a frame
+                var borderPath = canvas.append("rect")
+                    .attr("class", "frame")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("height", canvasHeight)
+                    .attr("width", canvasWidth)
+                    .style("stroke", "#de9000")
+                    .style("fill", "none")
+                    .style("stroke-width", 30);
+                var borderPath2 = canvas.append("rect")
+                    .attr("class", "frame")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("height", canvasHeight)
+                    .attr("width", canvasWidth)
+                    .style("stroke", "gold")
+                    .style("fill", "none")
+                    .style("stroke-width", 20);
+
+                // add "frame" to selectedLabels to update the table
+                selectedLabels.push("frame")
+                updateTable(selectedLabels);
+
+            }
+            else {
+                //turn the frame off, if there is one
+                canvas.selectAll('.frame').remove();
+                selectedLabels.splice("frame")
+                updateTable(selectedLabels);
+            }
+        })
+
+
+        let f1ButtonsData = [];
+        f1Label = ['tree', 'clouds', 'mountain', 'grass', 'lake', 'river', 'bushes', 'building', 'rocks', 'sun', 'waterfall', 'snow', 'path',
+            'ocean', 'beach', 'fence', 'fog', 'night', 'flowers', 'bridge'];
+        f1H2 = ["icons/tree.svg", "icons/clouds.svg", "icons/mountain.svg", "icons/grass.svg", "icons/lake.svg", "icons/river.svg", "icons/bushes.svg", "icons/building.svg",
+            "icons/rocks.svg", "icons/sun.svg", "icons/waterfall.svg", "icons/snow.svg", "icons/path.svg", "icons/ocean.svg", "icons/beach.svg",
+            "icons/fence.svg", "icons/fog.svg", "icons/night.svg", "icons/flowers.svg", "icons/bridge.svg"]
+        // f1H3 = ['Markets', 'Cafes & Bakeries', 'Desserts & Drinks', 'Restaurant'] //h3 labels
+
+        for (let i = 0; i < f1Label.length; i++) {
+            dict = { label: f1Label[i], h2: f1H2[i] };
+
+            // dict = { label: f1Label[i], h2: f1H2[i], h3: f1H3[i]};
+            f1ButtonsData.push(dict);
+        }
+
+        console.log(f1ButtonsData)
+        const f1div = d3.select('.icons')
+        f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').attr('class', 'iconButton').on('click', iconClicked);
+
+
+        console.log(f1Buttons)
+
+        f1Buttons.append('img')
+            .attr('width', 40)
+            .attr('height', 40)
+            .attr("src", d => d.h2)
+
+        f1Buttons.append('h4').text(d => d.label)
+
+
+        // reset button
+        f1div.append('button').attr('class', 'iconButton').attr('id', 'resetButton').on('click', resetCanvas).append('h4').text("erase entire canvas")
+
+
+
+        function resetCanvas() {
+
+            canvas.selectAll('image').attr("visibility", "hidden");
+            canvas.style("background-color", "#d8d0c1");
+            f1Buttons.classed('buttonUnclicked', true)
+            f1Buttons.classed('buttonClicked', false)
+            selectedLabels = [];
+            updateTable(selectedLabels);
+            // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
+
+        }
+
+        // store this info to move the previous bubble back
+        var prevBubble = { x: 0, y: 0, rad: 0 };
+        var prevBub = null; // use this to move it back
+        var prevBubR = null; // use this shrink back
+
+        var prevblabel = null;
+        var prevblabel_percent = null;
+
+
+        function iconClicked() {
+
+
+
+
+            // blabels_percent.attr("visibility", "hidden")
+            // blabels.attr("transform", `translate(${0},${+10})`)
+
+            // bubblenode.forEach((d)=>{
+            //         d3.select(d).transition(100).attr("r", (bubbleScale(d3.select(d).datum().count)))
+            // })
+
+
+            // thisBubble = d3.select(this);
+            //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
+
+
+            // Reset all the bubbles to the original size
+            // Reset text2 to hidden
+            // Move element label back to center
+            // console.log('triggered')
+            // console.log('iconClicked2')
+            // console.log(d3.select(this).datum().label)
+            button = d3.select(this)
+            // button.style('background-color', '#fcf8cc')
+            button.attr('class', 'iconButton buttonClicked')
+            button.classed('buttonUnclicked', false)
+
+            // label
+            buttonClicked = d3.select(this).datum().label;
+            buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
+
+
+            // bubble info
+            filteredBubble = packedbubble._groups[0].filter(d => d3.select(d).data()[0].element === buttonClicked)
+            console.log('filteredBubble', filteredBubble)
+            fixedPosx = 1100
+            fixedPosy = 250 / 2
+
+            thisBubble = d3.select(filteredBubble[0])
+            console.log('thisBubble', thisBubble)
+
+            xpos = d3.select(filteredBubble[0]).datum().x
+            ypos = d3.select(filteredBubble[0]).datum().y
+            // rad = filteredBubble[0].firstChild.r
+            rad = bubbleScale(thisBubble.datum().count);
+
+            // dec radius
+            // d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", prevBubble.rad)
+
+            // move bubble back
+            if (prevBub !== null) {
+                console.log('wow')
+                console.log(prevBubble)
+                prevBubR.transition().duration(600).attr("r", prevBubble.rad)
+                prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 3)})`)
+
+                // thisblabel = d3.select(filteredBubble[0].children[1])
+                prevblabel.attr("transform", `translate(${0},${0})`);
+
+                // thisblabel_percent = d3.select(filteredBubble[0].children[2])
+
+                prevblabel_percent.attr("visibility", "hidden");
+
+            }
+
+
+            // if button is not in the selectedLabels, add it to the array
+            if (buttonClickedIndex == -1) {
+                selectedLabels.push(buttonClicked);
+
+                // move bubble
+                thisBubble.transition().duration(400).attr("transform", `translate(${fixedPosx - xpos},${fixedPosy - ypos})`)
+                // increase radius
+                d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
+
+                thisblabel = d3.select(filteredBubble[0].children[1])
+                thisblabel.attr("transform", `translate(${0},${-10})`)
+
+                thisblabel_percent = d3.select(filteredBubble[0].children[2])
+
+                thisblabel_percent.attr("visibility", "visible")
+
+
+
+                // save bubble info, to move it back
+
+                prevBubble.x = xpos;
+                prevBubble.y = ypos;
+                prevBubble.rad = rad;
+                prevBub = thisBubble;
+                prevBubR = d3.select(filteredBubble[0].children[0]);
+
+                prevblabel = d3.select(filteredBubble[0].children[1]);
+
+                prevblabel_percent = d3.select(filteredBubble[0].children[2]);
+
+            }
+            // if it is not in selectedLabels, remove it from the array
+            // reset button bg color
+            if (buttonClickedIndex > -1) {
+                selectedLabels.splice(buttonClickedIndex, 1);
+
+                button.classed('buttonClicked', false)
+                button.attr('class', 'iconButton buttonUnclicked')
+
+                console.log(button);
+
+                // button.style("background-color", "white")
+                //     // idk whyy but the css hover disappears afte
+                //     .on("mouseover", function () {
+                //         button.style("background-color", "#fcf8cc")
+                //     })
+                //     .on("mouseout", function () {
+                //         button.style("background-color", "white")
+                //     })
+
+                // REMOVE DRAWING FROM CANVAS
+                canvas.select('.' + buttonClicked + '_drawing').attr("visibility", "hidden");
+                if (buttonClicked == 'night') {
+                    canvas.style("background-color", "#d8d0c1")
+                }
+
+
+            }
+
+            console.log('selectedLabels HERE');
+            console.log(selectedLabels);
+
+
+            // console.log('filteredBubble')
+            // console.log(packedbubble.datum().element)
+
+
+            // packedbubble._groups[0].forEach((d)=> {
+            //     console.log('hello')
+            //     console.log(d3.select(d).data())
+            // }
+
+
+
+
+
+
+            // filteredBubble = packedbubble.data().filter(d => d['element'] == buttonClicked)
+            console.log('filteredBubble')
+            console.log(filteredBubble[0])
+
+            console.log(d3.select(filteredBubble[0]).datum().x)
+
+            // d3.select(filteredBubble[0]) : ENTIRE NODE
+            // d3.select(filteredBubble[0].children[0]) :circle
+            // d3.select(filteredBubble[0].children[1]) :blabel
+            // d3.select(filteredBubble[0].children[2]) : blabel_percent
+            // d3.select(filtered)
+
+            // 1. make circle bigger
+            // filteredBubble[0].children[0] - this is the 
+
+            // filteredBubble[0].children[0].transition(100).attr("r", (bubbleScale(filteredBubble[0].children[0].datum().count) + 10))
+
+            // filteredBubble[0].attr("x", 1000)
+
+
+
+
+            // thisBubble.attr("x", 1000)
+            // thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
+
+
+            // thisblabel = d3.select(filteredBubble[0].children[1])
+            // thisblabel.attr("transform", `translate(${0},${-10})`)
+
+            // thisblabel_percent = d3.select(filteredBubble[0].children[2])
+
+            // thisblabel_percent.attr("visibility", "visible")
+
+
+
+
+
+
+            drawIcon(selectedLabels);
+            updateTable(selectedLabels);
+        }
+
+        function drawIcon(selectedButtons) {
+            //should this function filter out the original dataset to just include the rows with that element?
+            console.log('drawIcon');
+
+
+
+            selectedButtons.forEach((d) => {
+
+                if (d === 'night') {
+                    canvas.style('background-color', '#032040')
+                }
+                else {
+                    className = '.' + d + '_drawing'
+
+                    console.log('className')
+                    console.log(className)
+
+                    canvas.selectAll(className).attr("visibility", "visible");
+                }
+            })
+
+            // console.log(d3.select(this));
+        }
+
+
+
+        // Populate the data table
+        // updateTable( data )
+
+        // Update data table with new rows and cells
+        const episodeTable = d3.select("table#episode-table");
+
+        function updateTable(selectedLabels) {
+            console.log('updateTable')
+
+            episodeTable.selectAll("td").remove();
+            episodeTable.selectAll(".row").remove();
+            d3.select(".element_list").remove();
+            d3.select(".percentage text").remove();
+            // d3.select(".tutorials_percent").remove();
+
+            //buttonClicked is the icon that the user has selected
+            //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
+            filteredData = Array.from(bob_ross)
+            elementsText = "";
+            selectedLabels.forEach((i) => {
+                console.log(i);
+                filteredData = filteredData.filter(d => d[i] == 1)
+                label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
+
+                elementsText = elementsText + " " + label + ","
+
+
+            })
+
+            containsLabel = d3.select('#containing')
+
+            percentageLabel = d3.select('#percentage')
+
+            contains = "Your painting containing all of the following:" + elementsText.slice(0, -1)
+
+
+            percent = 'can be found in ' + ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
+
+            // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+            containsLabel.text(contains)
+
+            percentageLabel.text(percent)
+
+
+            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+
+
+
+            // d3.select(".percentage").append('h3').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
+
+
+            // d3.select(".tutorials_head").append('text').attr("class", "tutorials_percent").text(percentage + " Tutorials");
+
+
+
+
+            console.log('filteredData')
+            console.log(filteredData);
+
+            console.log('elementsText')
+            console.log(elementsText)
+
+
+
+            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
+
+            // First make table rows for each point using a data join 
+            var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
+                .join(enter => {
+                    // In the enter part, we add a <tr> and then three <td>
+                    let newRows = enter.append("tr").attr("class", "row")
+
+                    // newRows.append("td").text(d => d.title);
+                    // newRows.append("td").text(d => d.episode);
+
+                    cell = newRows.append("td").append("div").attr("class", "table_cell")
+
+                    cell.append("img")
+                        .attr("class", "cell_image")
+                        .attr("src", d => 'paintings/' + d.episode + '.jpeg');
+
+                    cell.append("text")
+                        .text(d => "Title: " + d.title)
+
+                    cell.append("text")
+                        .text(d => "Episode: " + d.episode)
+
+                }
+                    // update => {
+                    //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
+                    //     // Then repopulate them all over again
+                    //     // update.selectAll("td").remove()
+
+                    //     update.append("td").text(d => d.title);
+                    //     update.append("td").text(d => d.episode);
+                    //     //need a column for the element?
+                    //     update.append("td").text(buttonClicked)
+
+                    // }
+                )
+
+            containsLabel = d3.select('#containing')
+            percentageLabel = d3.select('#percentage')
+
+            if (selectedLabels.length != 0) {
+                contains = "Your painting containing:" + elementsText.slice(0, -1)
+                percent = 'can be found in ' + ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
+
+                // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
+
+                containsLabel.text(contains)
+                percentageLabel.text(percent)
+
+            }
+
+            else {
+
+                containsLabel.text('All 403 Bob Ross paintings from 31 seasons:')
+                percentageLabel.text('Make a painting to filter these episodes by element!')
+            }
+
+
+        }
+        updateTable(selectedLabels);
+    }
+    getData();
+
+</script>
+
+
+</html>
