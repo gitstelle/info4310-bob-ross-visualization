@@ -71,42 +71,8 @@
         const canvasHeight = canvas.attr("height")
         const canvasWidth = canvas.attr("width")
 
-        // Tooltip contains 1) element being hovered over 2) the percentage of paintings that contain ONLY this element
-
-        let tooltipWidth = 220;
-        let tooltipHeight = 60;
-        let tooltip = canvas.append("g")
-            .attr("class", "tooltip")
-            .attr("visibility", "hidden");
-
-        tooltip.append("rect")
-            .attr("fill", "#a10159")
-            .attr("opacity", 0.7)
-            .attr("x", -tooltipWidth / 2.0)
-            .attr("y", 0)
-            .attr("rx", 20)
-            .attr("ry", 20)
-            .attr("width", tooltipWidth)
-            .attr("height", tooltipHeight)
-
-
-        let txt = tooltip.append("text")
-            .attr("fill", "white")
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "hanging")
-            .attr("x", 0)
-            .attr("y", 2)
-
-
-        let txt2 = tooltip.append("text")
-            .attr("fill", "white")
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "hanging")
-            .attr("x", 0)
-            .attr("y", 22)
-
         var selectedLabels = [];
-        
+
         canvas.append("svg:image")
             .attr("class", "sun_drawing")
             .attr("x", 870)
@@ -273,12 +239,47 @@
             .attr("xlink:href", "canvas_final/snow.png")
             .attr("visibility", "hidden")
 
+        // Tooltip contains 1) element being hovered over 2) the percentage of paintings that contain ONLY this element
 
+        let tooltipWidth = 220;
+        let tooltipHeight = 60;
+        let tooltip = canvas.append("g")
+            .attr("class", "tooltip")
+            .attr("visibility", "hidden");
+
+        tooltip.append("rect")
+            .attr("fill", "#a10159")
+            .attr("opacity", 0.7)
+            .attr("x", -tooltipWidth / 2.0)
+            .attr("y", 0)
+            .attr("rx", 20)
+            .attr("ry", 20)
+            .attr("width", tooltipWidth)
+            .attr("height", tooltipHeight)
+
+
+        let txt = tooltip.append("text")
+            .attr("fill", "white")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "hanging")
+            .attr("x", 0)
+            .attr("y", 2)
+
+
+        let txt2 = tooltip.append("text")
+            .attr("fill", "white")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "hanging")
+            .attr("x", 0)
+            .attr("y", 22)
 
 
         canvas.selectAll("image")
-            .on("mouseover", mouseEntersDrawing)
+            .on("mouseover", mouseEntersDrawing())
             .on("mouseout", mouseLeavesDrawing)
+
+
+
 
         function mouseEntersDrawing() {
 
@@ -303,7 +304,7 @@
             let xPos = d3.select(this).attr('x');
             let yPos = d3.select(this).attr('y');
 
-            tooltip.attr("transform", `translate(${(xPos)},${yPos})`);
+            tooltip.attr("transform", `translate(${(d3.pointer(event)[0])},${d3.pointer(event)[1]})`);
 
         }
 
