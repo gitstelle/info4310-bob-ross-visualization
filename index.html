@@ -231,9 +231,6 @@
             .attr("xlink:href", "canvas_final/grass.png")
             .attr("visibility", "hidden")
 
-
-
-
         canvas.append("svg:image")
             .attr("class", "snow_drawing")
             .attr("x", 30)
@@ -390,7 +387,8 @@
 
 
         function resetCanvas() {
-            canvas.selectAll(className).attr("visibility", "hidden");
+
+            canvas.selectAll('image').attr("visibility", "hidden");
             f1Buttons.style('background-color', 'white')
             selectedLabels = [];
             updateTable(selectedLabels);
@@ -404,13 +402,14 @@
             console.log(d3.select(this).datum().label)
             button = d3.select(this)
             button.style('background-color', '#fcf8cc')
+            console.log('debug')
 
             // label
             buttonClicked = d3.select(this).datum().label;
             buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
 
             // if button is not in the selectedLabels, add it to the array
-            if (buttonClickedIndex === -1) {
+            if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
                 // button.attr('class','buttonClicked')
                 // probably call a function here to draw on the canvas
@@ -422,8 +421,6 @@
                 // button.classed('buttonClicked',false)
                 // button.classed('buttonUnclicked',true)
                 console.log(button);
-                console.log('buttonClicked')
-
 
                 button.style("background-color", "white")
                     // idk whyy but the css hover disappears afte
@@ -433,15 +430,18 @@
                     .on("mouseout", function () {
                         button.style("background-color", "white")
                     })
+                    .on("click", function () {
+                        button.style("background-color", "#fcf8cc")
+                    })
 
                 // REMOVE DRAWING FROM CANVAS
                 canvas.select('.' + buttonClicked + '_drawing').attr("visibility", "hidden");
                 if (buttonClicked == 'night') {
-                    canvas.style("background-color", "#EEEEEE")
+                    canvas.style("background-color", "#d8d0c1")
                 }
             }
 
-            console.log('selectedLabels');
+            console.log('selectedLabels HERE');
             console.log(selectedLabels);
 
 
