@@ -141,7 +141,7 @@
             d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
 
             thisblabel = d3.select(filteredBubble[0].children[1])
-            thisblabel.attr("transform", `translate(${0},${-10})`)
+            thisblabel.attr("transform", `translate(${0},${10})`)
 
             thisblabel_percent = d3.select(filteredBubble[0].children[2])
             thisblabel_percent.attr("visibility", "visible")
@@ -174,9 +174,23 @@
 
 
         }
-        // .on('mouseover', mouseEntersBubble)
-        // .on('mouseout', mouseLeavesBubble);
 
+        let blabels_percent = packedbubble.append("text")
+            .attr("id", "blabel_percent")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "25px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+            .attr("transform", `translate(${0},${-30})`)
+            .attr("visibility", "hidden")
+        
+        // let blabels_cont = packedbubble.append('text')
+        //     .text('of paintings contain')
+        //     .attr("visibility", "hidden")
+        
         let blabels = packedbubble.append("text")
             .attr("id", "blabel")
             .attr("text-anchor", "middle")
@@ -186,23 +200,7 @@
             .attr("font-weight", "bold")
             .attr("fill", 'white')
             .attr('pointer-events', 'none')
-        // .attr("transform", `translate(${0},${-10})`)
 
-        //on click: 
-        // transform translate blabels .attr("transform", `translate(${0},${-10})`)
-        // make blabels_percent visible
-
-        let blabels_percent = packedbubble.append("text")
-            .attr("id", "blabel_percent")
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "middle")
-            .attr("dy", ".35em")
-            .attr("font-size", "16px")
-            .attr("font-weight", "bold")
-            .attr("fill", 'white')
-            .attr('pointer-events', 'none')
-            .attr("transform", `translate(${0},${10})`)
-            .attr("visibility", "hidden")
 
 
 
@@ -253,6 +251,7 @@
                     .text(d => ((Number(d.count) / bob_ross.length) * 100).toFixed(1) + '%')
 
                 blabels.raise()
+                // blabels_cont.raise()
                 blabels_percent.raise()
             });
         while (bubblesim.alpha() > 0.001) {
@@ -486,28 +485,6 @@
         }
 
         function iconClicked() {
-
-
-
-
-            // blabels_percent.attr("visibility", "hidden")
-            // blabels.attr("transform", `translate(${0},${+10})`)
-
-            // bubblenode.forEach((d)=>{
-            //         d3.select(d).transition(100).attr("r", (bubbleScale(d3.select(d).datum().count)))
-            // })
-
-
-            // thisBubble = d3.select(this);
-            //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
-
-
-            // Reset all the bubbles to the original size
-            // Reset text2 to hidden
-            // Move element label back to center
-            // console.log('triggered')
-            // console.log('iconClicked2')
-            // console.log(d3.select(this).datum().label)
             button = d3.select(this)
             // button.style('background-color', '#fcf8cc')
             button.attr('class', 'iconButton buttonClicked')
@@ -516,11 +493,6 @@
             // label
             buttonClicked = d3.select(this).datum().label;
             buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
-
-
-            // dec radius
-            // d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", prevBubble.rad)
-
 
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex == -1) {
@@ -554,64 +526,10 @@
                     canvas.style("background-color", "#d8d0c1")
                 }
 
-
             }
 
             console.log('selectedLabels HERE');
             console.log(selectedLabels);
-
-
-            // console.log('filteredBubble')
-            // console.log(packedbubble.datum().element)
-
-
-            // packedbubble._groups[0].forEach((d)=> {
-            //     console.log('hello')
-            //     console.log(d3.select(d).data())
-            // }
-
-
-
-
-
-
-            // filteredBubble = packedbubble.data().filter(d => d['element'] == buttonClicked)
-            console.log('filteredBubble')
-            console.log(filteredBubble[0])
-
-            console.log(d3.select(filteredBubble[0]).datum().x)
-
-            // d3.select(filteredBubble[0]) : ENTIRE NODE
-            // d3.select(filteredBubble[0].children[0]) :circle
-            // d3.select(filteredBubble[0].children[1]) :blabel
-            // d3.select(filteredBubble[0].children[2]) : blabel_percent
-            // d3.select(filtered)
-
-            // 1. make circle bigger
-            // filteredBubble[0].children[0] - this is the 
-
-            // filteredBubble[0].children[0].transition(100).attr("r", (bubbleScale(filteredBubble[0].children[0].datum().count) + 10))
-
-            // filteredBubble[0].attr("x", 1000)
-
-
-
-
-            // thisBubble.attr("x", 1000)
-            // thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
-
-
-            // thisblabel = d3.select(filteredBubble[0].children[1])
-            // thisblabel.attr("transform", `translate(${0},${-10})`)
-
-            // thisblabel_percent = d3.select(filteredBubble[0].children[2])
-
-            // thisblabel_percent.attr("visibility", "visible")
-
-
-
-
-
 
             drawIcon(selectedLabels);
             updateTable(selectedLabels);

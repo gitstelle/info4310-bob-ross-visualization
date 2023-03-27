@@ -254,6 +254,7 @@ color:rgb(83, 29, 73)
 
   .river_drawing {
     height:300px;
+    x:-100px;
     width: auto;
   }
   .overview {
