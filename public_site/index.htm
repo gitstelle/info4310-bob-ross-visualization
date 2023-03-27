@@ -79,7 +79,7 @@
 
         const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
         const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([20, 40]);
-        var bubblecolorScale = d3.scaleOrdinal(['#ff9900','#940000','#d3350d','#9ce279','#ccccff','#ff9966','#f282dd','#666699','#cd1370','#0a4234','#8ac2ff','#a277e4','#333394','#005a66','#ff6633','#6666ff','#54667d','#7ad5e1','#f0c000','#00cc58','#3366ff']).domain(d3.map(bob_ross_counts, d => d.element))
+        var bubblecolorScale = d3.scaleOrdinal(['#ff9900', '#940000', '#d3350d', '#9ce279', '#ccccff', '#ff9966', '#f282dd', '#666699', '#cd1370', '#0a4234', '#8ac2ff', '#a277e4', '#333394', '#005a66', '#ff6633', '#6666ff', '#715060', '#7ad5e1', '#f0c000', '#00cc58', '#3366ff']).domain(d3.map(bob_ross_counts, d => d.element))
 
         packedbubble = bubblesselector.selectAll('g.bubble')
             .data(bob_ross_counts)
@@ -87,8 +87,6 @@
             .attr("id", "bubble")
             .attr("transform", `translate(${0},${-bubblesHeight / 4})`)
             .on("click", selectBubble);
-
-
 
         // store this info to move the previous bubble back
         var prevBubble = { x: 0, y: 0, rad: 0 };
@@ -111,6 +109,7 @@
             thisBubble = d3.select(filteredBubble[0])
 
             xpos = d3.select(filteredBubble[0]).datum().x
+
             ypos = d3.select(filteredBubble[0]).datum().y
             rad = bubbleScale(thisBubble.datum().count);
 
@@ -120,7 +119,7 @@
             d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 125)
 
             thisblabel = d3.select(filteredBubble[0].children[1])
-            thisblabel.transition(40).attr("transform", `translate(${0},${10})`).attr('font-size','20px')
+            thisblabel.transition(40).attr("transform", `translate(${0},${10})`).attr('font-size', '20px')
 
             thisblabel_percent = d3.select(filteredBubble[0].children[2])
             thisblabel_percent.transition(40).attr("visibility", "visible")
@@ -129,25 +128,25 @@
             thisblabel_info.transition(40).attr("visibility", "visible")
 
             // move bubble back
-            if (prevBub !== null) {
+            if ((prevBub !== null)) {
 
                 prevBubR.transition().duration(600).attr("r", prevBubble.rad)
                 prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 4)})`)
 
-                prevblabel.transition(40).attr("transform", `translate(${0},${0})`).attr('font-size','16px');
+                prevblabel.transition(40).attr("transform", `translate(${0},${0})`).attr('font-size', '16px');
 
                 prevblabel_percent.transition(40).attr("visibility", "hidden");
                 prevblabel_info.transition(40).attr("visibility", "hidden")
             }
-
+            
             prevBubble.x = xpos;
             prevBubble.y = ypos;
             prevBubble.rad = rad;
             prevBub = thisBubble;
-            prevBubR = d3.select(filteredBubble[0].children[0]);
             prevblabel = d3.select(filteredBubble[0].children[1]);
             prevblabel_percent = d3.select(filteredBubble[0].children[2]);
             prevblabel_info = d3.select(filteredBubble[0].children[3]);
+            prevBubR = d3.select(filteredBubble[0].children[0]);
 
         }
 
@@ -424,7 +423,7 @@
         f1H2 = ["icons/tree.svg", "icons/clouds.svg", "icons/mountain.svg", "icons/grass.svg", "icons/lake.svg", "icons/river.svg", "icons/bushes.svg", "icons/building.svg",
             "icons/rocks.svg", "icons/sun.svg", "icons/waterfall.svg", "icons/snow.svg", "icons/path.svg", "icons/ocean.svg", "icons/beach.svg",
             "icons/fence.svg", "icons/fog.svg", "icons/night.svg", "icons/flowers.svg", "icons/bridge.svg"]
-    
+
         for (let i = 0; i < f1Label.length; i++) {
             dict = { label: f1Label[i], h2: f1H2[i] };
 
@@ -576,4 +575,5 @@
     getData();
 
 </script>
+
 </html>

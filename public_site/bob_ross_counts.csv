@@ -1,22 +1,22 @@
 element,count,info
 beach,27,likely also has: clouds
-bridge,7,
+bridge,7,likely also has: building
 building,96,"such as: cabin, mill, barn"
-bushes,120,
+bushes,120,likely also has: grass
 clouds,182,"such as: cumulus, cirrus"
 fence,24,likely also has: building (barn)
 flowers,12,
 fog,23,
 frame,54,"such as: oval, rectangular, circle"
-grass,142,
+grass,142,likely also has: bushes
 lake,143,likely also has: building (cabin)
 mountain,183,likely also has: snow
-night,11,
+night,11,"likely also has: snow, building"
 ocean,36,"likely also has: waves, cliffs"
-path,49,
-river,126,
+path,49,likely also has: building
+river,126,likely also has:grass
 rocks,77,likely also has: ocean
 snow,75,likely also has: building (cabin)
 sun,40,
 tree,369,"such as: deciduous, coniferous, palm"
-waterfall,39,
+waterfall,39,likely also has: river
