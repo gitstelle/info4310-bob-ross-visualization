@@ -260,3 +260,7 @@ color:rgb(83, 29, 73)
   .overview {
     margin-bottom: 10;
   }
+
+  .blabels_info {
+    max-width: 300;
+  }

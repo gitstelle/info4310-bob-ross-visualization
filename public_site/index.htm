@@ -72,6 +72,7 @@
 
         let bob_ross = await d3.csv("bob_ross.csv", d3.autotype);
         let bob_ross_counts = await d3.csv("bob_ross_counts.csv", d3.autotype);
+        console.log(bob_ross_counts)
 
         console.log(bob_ross);
         console.log(bob_ross_counts);
@@ -106,7 +107,7 @@
             .attr("transform", `translate(${0},${-bubblesHeight / 4})`)
             .on("click", selectBubble);
 
-            
+
 
         // store this info to move the previous bubble back
         var prevBubble = { x: 0, y: 0, rad: 0 };
@@ -115,6 +116,8 @@
 
         var prevblabel = null;
         var prevblabel_percent = null;
+        var prevblabel_info = null;
+
 
         function selectBubble() {
             // bubble info
@@ -124,10 +127,12 @@
 
             console.log('filteredBubble', filteredBubble)
             fixedPosx = 1100
-            fixedPosy = 250 / 2
+            fixedPosy = 300 / 2
 
             thisBubble = d3.select(filteredBubble[0])
-            console.log('thisBubble', thisBubble)
+
+            
+            console.log('thisBubble', d3.select(filteredBubble[0].children))
 
             xpos = d3.select(filteredBubble[0]).datum().x
             ypos = d3.select(filteredBubble[0]).datum().y
@@ -138,13 +143,16 @@
             // move bubble
             thisBubble.transition().duration(400).attr("transform", `translate(${fixedPosx - xpos},${fixedPosy - ypos})`)
             // increase radius
-            d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
+            d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 125)
 
             thisblabel = d3.select(filteredBubble[0].children[1])
             thisblabel.attr("transform", `translate(${0},${10})`)
 
             thisblabel_percent = d3.select(filteredBubble[0].children[2])
             thisblabel_percent.attr("visibility", "visible")
+
+            thisblabel_info = d3.select(filteredBubble[0].children[3])
+            thisblabel_info.attr("visibility", "visible")
 
             // move bubble back
             if (prevBub !== null) {
@@ -158,6 +166,8 @@
 
                 // thisblabel_percent = d3.select(filteredBubble[0].children[2])
                 prevblabel_percent.attr("visibility", "hidden");
+                prevblabel_info.attr("visibility", "hidden")
+
                 // prevBub = null;
             }
 
@@ -168,12 +178,25 @@
             prevBubR = d3.select(filteredBubble[0].children[0]);
             prevblabel = d3.select(filteredBubble[0].children[1]);
             prevblabel_percent = d3.select(filteredBubble[0].children[2]);
+            prevblabel_info = d3.select(filteredBubble[0].children[3]);
             console.log('here')
             console.log("p", prevBub)
             console.log("t", thisBubble)
 
 
         }
+
+        let blabels_info = packedbubble.append("text")
+            .attr("class", "blabels_info")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("dy", ".35em")
+            .attr("font-size", "14px")
+            .attr("font-weight", "bold")
+            .attr("fill", 'white')
+            .attr('pointer-events', 'none')
+            .attr("transform", `translate(${0},${30})`)
+            .attr("visibility", "hidden")
 
         let blabels_percent = packedbubble.append("text")
             .attr("id", "blabel_percent")
@@ -186,11 +209,8 @@
             .attr('pointer-events', 'none')
             .attr("transform", `translate(${0},${-30})`)
             .attr("visibility", "hidden")
-        
-        // let blabels_cont = packedbubble.append('text')
-        //     .text('of paintings contain')
-        //     .attr("visibility", "hidden")
-        
+
+
         let blabels = packedbubble.append("text")
             .attr("id", "blabel")
             .attr("text-anchor", "middle")
@@ -201,9 +221,6 @@
             .attr("fill", 'white')
             .attr('pointer-events', 'none')
 
-
-
-
         var bubblenode = packedbubble.append("circle")
             .attr("class", "bubbles")
             .attr('cx', 0)
@@ -212,14 +229,14 @@
             .attr("stroke", "none")
             .style("stroke-width", 0)
             .attr('r', d => bubbleScale(d.count))
-        .on("mouseover", function () {
-            thisBubble = d3.select(this);
-            thisBubble.transition(40).style('stroke-width','5px').style("stroke","#efdf8d").style('stroke-opacity',.8).style('cursor','pointer')
-        })
-        .on("mouseout", function () {
-            thisBubble = d3.select(this);
-            thisBubble.transition(40).style('stroke-width','0px')
-        });
+            .on("mouseover", function () {
+                thisBubble = d3.select(this);
+                thisBubble.transition(40).style('stroke-width', '5px').style("stroke", "#efdf8d").style('stroke-opacity', .8).style('cursor', 'pointer')
+            })
+            .on("mouseout", function () {
+                thisBubble = d3.select(this);
+                thisBubble.transition(40).style('stroke-width', '0px')
+            });
 
 
 
@@ -248,11 +265,18 @@
                 blabels_percent.attr("x", d => Math.min(bubblesWidth, d.x))
                     .attr("y", d => Math.min(bubblesHeight, d.y))
                     .attr("width", "20")
-                    .text(d => ((Number(d.count) / bob_ross.length) * 100).toFixed(1) + '%')
+                    .text(d => ((Number(d.count) / bob_ross.length) * 100).toFixed(1) + '% contain:')
+
+                blabels_info.attr("x", d => Math.min(bubblesWidth, d.x))
+                    .attr("y", d => Math.min(bubblesHeight, d.y))
+                    .attr("max-width", "200")
+                    .text(d => d.info)
 
                 blabels.raise()
-                // blabels_cont.raise()
                 blabels_percent.raise()
+                blabels_info.raise()
+
+
             });
         while (bubblesim.alpha() > 0.001) {
             bubblesim.tick()
