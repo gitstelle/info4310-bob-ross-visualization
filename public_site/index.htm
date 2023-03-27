@@ -9,11 +9,7 @@
 <body>
     <h1>The Works of Bob Ross</h1>
     <p id=quote><q>We don't make mistakes, just happy little accidents.</q></p>
-
-
-
     <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
-
     <svg id="bubbles" height="300" width="100%"></svg>
 
     <div class="container">
@@ -25,7 +21,7 @@
             </div>
             <div id=resetContainer></div>
             <div class="frame_toggle">
-                <h4> frame your work? </h4>
+                <h4>frame your work?</h4>
                 <label class="switch">
                     <input type="checkbox" id="toggle" value="true" name="toggles">
                     <span class="slider round">
@@ -40,7 +36,6 @@
             </div>
 
             <div class="canvas">
-                <!-- <h2>Canvas</h2> -->
                 <svg id="canvas" width=1000 height=700></svg>
             </div>
         </div>
@@ -49,16 +44,12 @@
             <div class="tutorials_head">
                 <h3 id='containing'></h3>
                 <h4 id='percentage'></h4>
-                <!-- <span class="percentage"></span> <span style="font-size: 20px;"></span> -->
-
             </div>
             <div class="elements" id="elements"></div>
             <div class="tutorials">
                 <table id="episode-table">
                     <thead>
-                        <!-- <th style="width: 170px">Episode</th> -->
                         <th id="column"></th>
-                        <!-- <th id="column">Episode</th> -->
                     </thead>
                 </table>
             </div>
@@ -72,16 +63,10 @@
 
         let bob_ross = await d3.csv("bob_ross.csv", d3.autotype);
         let bob_ross_counts = await d3.csv("bob_ross_counts.csv", d3.autotype);
-        console.log(bob_ross_counts)
-
-        console.log(bob_ross);
-        console.log(bob_ross_counts);
-
 
         const canvas = d3.select("svg#canvas")
         const canvasHeight = canvas.attr("height")
         const canvasWidth = canvas.attr("width")
-
 
         const bubblessvg = d3.select("svg#bubbles");
         const bubbleswidth = bubblessvg.attr("width");
@@ -92,13 +77,9 @@
         const bubblesselector = bubblessvg.append("g")
             .attr("transform", "translate(" + bubblesmargin.left + "," + bubblesmargin.top + ")");
 
-
         const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
         const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([20, 40]);
-        // const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
-        var bubblecolorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.map(bob_ross_counts, d => d.element))
-
-        // const bubblesselector = bubblessvg.append("g");
+        var bubblecolorScale = d3.scaleOrdinal(['#ff9900','#940000','#d3350d','#9ce279','#ccccff','#ff9966','#f282dd','#666699','#cd1370','#0a4234','#8ac2ff','#a277e4','#333394','#005a66','#ff6633','#6666ff','#54667d','#7ad5e1','#f0c000','#00cc58','#3366ff']).domain(d3.map(bob_ross_counts, d => d.element))
 
         packedbubble = bubblesselector.selectAll('g.bubble')
             .data(bob_ross_counts)
@@ -122,23 +103,16 @@
         function selectBubble() {
             // bubble info
             label = d3.select(this).datum().element
-            console.log(d3.select(this).datum())
             filteredBubble = packedbubble._groups[0].filter(d => d3.select(d).data()[0].element === label)
 
-            console.log('filteredBubble', filteredBubble)
             fixedPosx = 1100
             fixedPosy = 300 / 2
 
             thisBubble = d3.select(filteredBubble[0])
 
-            
-            console.log('thisBubble', d3.select(filteredBubble[0].children))
-
             xpos = d3.select(filteredBubble[0]).datum().x
             ypos = d3.select(filteredBubble[0]).datum().y
-            // rad = filteredBubble[0].firstChild.r
             rad = bubbleScale(thisBubble.datum().count);
-            console.log('moveto', xpos, ypos)
 
             // move bubble
             thisBubble.transition().duration(400).attr("transform", `translate(${fixedPosx - xpos},${fixedPosy - ypos})`)
@@ -146,29 +120,24 @@
             d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 125)
 
             thisblabel = d3.select(filteredBubble[0].children[1])
-            thisblabel.attr("transform", `translate(${0},${10})`)
+            thisblabel.transition(40).attr("transform", `translate(${0},${10})`).attr('font-size','20px')
 
             thisblabel_percent = d3.select(filteredBubble[0].children[2])
-            thisblabel_percent.attr("visibility", "visible")
+            thisblabel_percent.transition(40).attr("visibility", "visible")
 
             thisblabel_info = d3.select(filteredBubble[0].children[3])
-            thisblabel_info.attr("visibility", "visible")
+            thisblabel_info.transition(40).attr("visibility", "visible")
 
             // move bubble back
             if (prevBub !== null) {
-                console.log('wow')
-                console.log(prevBubble)
+
                 prevBubR.transition().duration(600).attr("r", prevBubble.rad)
                 prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 4)})`)
 
-                // thisblabel = d3.select(filteredBubble[0].children[1])
-                prevblabel.attr("transform", `translate(${0},${0})`);
+                prevblabel.transition(40).attr("transform", `translate(${0},${0})`).attr('font-size','16px');
 
-                // thisblabel_percent = d3.select(filteredBubble[0].children[2])
-                prevblabel_percent.attr("visibility", "hidden");
-                prevblabel_info.attr("visibility", "hidden")
-
-                // prevBub = null;
+                prevblabel_percent.transition(40).attr("visibility", "hidden");
+                prevblabel_info.transition(40).attr("visibility", "hidden")
             }
 
             prevBubble.x = xpos;
@@ -179,10 +148,6 @@
             prevblabel = d3.select(filteredBubble[0].children[1]);
             prevblabel_percent = d3.select(filteredBubble[0].children[2]);
             prevblabel_info = d3.select(filteredBubble[0].children[3]);
-            console.log('here')
-            console.log("p", prevBub)
-            console.log("t", thisBubble)
-
 
         }
 
@@ -238,8 +203,6 @@
                 thisBubble.transition(40).style('stroke-width', '0px')
             });
 
-
-
         var bubblesim = d3.forceSimulation()
             .nodes(bob_ross_counts)
             .force("center", d3.forceCenter()
@@ -275,17 +238,11 @@
                 blabels.raise()
                 blabels_percent.raise()
                 blabels_info.raise()
-
-
             });
+
         while (bubblesim.alpha() > 0.001) {
             bubblesim.tick()
         }
-
-
-        console.log('packedBubble')
-        console.log(packedbubble);
-
         var selectedLabels = [];
 
         canvas.style("background-color", "#d8d0c1")
@@ -467,8 +424,7 @@
         f1H2 = ["icons/tree.svg", "icons/clouds.svg", "icons/mountain.svg", "icons/grass.svg", "icons/lake.svg", "icons/river.svg", "icons/bushes.svg", "icons/building.svg",
             "icons/rocks.svg", "icons/sun.svg", "icons/waterfall.svg", "icons/snow.svg", "icons/path.svg", "icons/ocean.svg", "icons/beach.svg",
             "icons/fence.svg", "icons/fog.svg", "icons/night.svg", "icons/flowers.svg", "icons/bridge.svg"]
-        // f1H3 = ['Markets', 'Cafes & Bakeries', 'Desserts & Drinks', 'Restaurant'] //h3 labels
-
+    
         for (let i = 0; i < f1Label.length; i++) {
             dict = { label: f1Label[i], h2: f1H2[i] };
 
@@ -476,12 +432,8 @@
             f1ButtonsData.push(dict);
         }
 
-        console.log(f1ButtonsData)
         const f1div = d3.select('.icons')
         f1Buttons = f1div.selectAll('button').data(f1ButtonsData).join('button').attr('class', 'iconButton').on('click', iconClicked);
-
-
-        console.log(f1Buttons)
 
         f1Buttons.append('img')
             .attr('width', 40)
@@ -490,11 +442,8 @@
 
         f1Buttons.append('h4').text(d => d.label)
 
-
         // reset button
         f1div.append('button').attr('class', 'iconButton').attr('id', 'resetButton').on('click', resetCanvas).append('h4').text("erase entire canvas")
-
-
 
         function resetCanvas() {
 
@@ -504,8 +453,6 @@
             f1Buttons.classed('buttonClicked', false)
             selectedLabels = [];
             updateTable(selectedLabels);
-            // f1Buttons.style('background-color', '#f0f0f0') // reset colors to default
-
         }
 
         function iconClicked() {
@@ -521,9 +468,6 @@
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
-
-                // save bubble info, to move it back
-
             }
             // if it is not in selectedLabels, remove it from the array
             // reset button bg color
@@ -533,17 +477,6 @@
                 button.classed('buttonClicked', false)
                 button.attr('class', 'iconButton buttonUnclicked')
 
-                console.log(button);
-
-                // button.style("background-color", "white")
-                //     // idk whyy but the css hover disappears afte
-                //     .on("mouseover", function () {
-                //         button.style("background-color", "#fcf8cc")
-                //     })
-                //     .on("mouseout", function () {
-                //         button.style("background-color", "white")
-                //     })
-
                 // REMOVE DRAWING FROM CANVAS
                 canvas.select('.' + buttonClicked + '_drawing').attr("visibility", "hidden");
                 if (buttonClicked == 'night') {
@@ -552,18 +485,11 @@
 
             }
 
-            console.log('selectedLabels HERE');
-            console.log(selectedLabels);
-
             drawIcon(selectedLabels);
             updateTable(selectedLabels);
         }
 
         function drawIcon(selectedButtons) {
-            //should this function filter out the original dataset to just include the rows with that element?
-            console.log('drawIcon');
-
-
 
             selectedButtons.forEach((d) => {
 
@@ -572,18 +498,10 @@
                 }
                 else {
                     className = '.' + d + '_drawing'
-
-                    console.log('className')
-                    console.log(className)
-
                     canvas.selectAll(className).attr("visibility", "visible");
                 }
             })
-
-            // console.log(d3.select(this));
         }
-
-
 
         // Populate the data table
         // updateTable( data )
@@ -592,74 +510,35 @@
         const episodeTable = d3.select("table#episode-table");
 
         function updateTable(selectedLabels) {
-            console.log('updateTable')
-
             episodeTable.selectAll("td").remove();
             episodeTable.selectAll(".row").remove();
             d3.select(".element_list").remove();
             d3.select(".percentage text").remove();
-            // d3.select(".tutorials_percent").remove();
 
             //buttonClicked is the icon that the user has selected
             //Need to take this label, filter the bob_ross data for rows where column: [label] is 1
             filteredData = Array.from(bob_ross)
             elementsText = "";
             selectedLabels.forEach((i) => {
-                console.log(i);
                 filteredData = filteredData.filter(d => d[i] == 1)
                 label = i.charAt(0).toUpperCase() + i.substring(0 + 1)
 
                 elementsText = elementsText + " " + label + ","
-
-
             })
 
             containsLabel = d3.select('#containing')
-
             percentageLabel = d3.select('#percentage')
-
             contains = "Your painting containing all of the following:" + elementsText.slice(0, -1)
-
-
             percent = 'can be found in ' + ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
 
-            // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
-
             containsLabel.text(contains)
-
             percentageLabel.text(percent)
-
-
-            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
-
-
-
-            // d3.select(".percentage").append('h3').attr("class", "tutorials_percent").text(percentage).style("font-size", 20);
-
-
-            // d3.select(".tutorials_head").append('text').attr("class", "tutorials_percent").text(percentage + " Tutorials");
-
-
-
-
-            console.log('filteredData')
-            console.log(filteredData);
-
-            console.log('elementsText')
-            console.log(elementsText)
-
-
-
-            // d3.select(".elements").append('h3').attr("class", "element_list").text("Contain Elements:" + elementsText.slice(0, -1));
 
             // First make table rows for each point using a data join 
             var tableRows = episodeTable.selectAll("tr.row").data(filteredData)
                 .join(enter => {
                     // In the enter part, we add a <tr> and then three <td>
                     let newRows = enter.append("tr").attr("class", "row")
-
-                    // newRows.append("td").text(d => d.title);
-                    // newRows.append("td").text(d => d.episode);
 
                     cell = newRows.append("td").append("div").attr("class", "table_cell")
 
@@ -674,17 +553,6 @@
                         .text(d => "Episode: " + d.episode)
 
                 }
-                    // update => {
-                    //     // For each preexisting <tr>, clear out any <td> that exist there already just to make life easier
-                    //     // Then repopulate them all over again
-                    //     // update.selectAll("td").remove()
-
-                    //     update.append("td").text(d => d.title);
-                    //     update.append("td").text(d => d.episode);
-                    //     //need a column for the element?
-                    //     update.append("td").text(buttonClicked)
-
-                    // }
                 )
 
             containsLabel = d3.select('#containing')
@@ -694,26 +562,18 @@
                 contains = "Your painting containing:" + elementsText.slice(0, -1)
                 percent = 'can be found in ' + ((filteredData.length / bob_ross.length) * 100).toFixed(2) + '% of Bob Ross episodes!';
 
-                // console.log(Number(filteredData.length / bob_ross.length).toFixed(2));
-
                 containsLabel.text(contains)
                 percentageLabel.text(percent)
-
             }
 
             else {
-
                 containsLabel.text('All 403 Bob Ross paintings from 31 seasons:')
                 percentageLabel.text('Make a painting to filter these episodes by element!')
             }
-
-
         }
         updateTable(selectedLabels);
     }
     getData();
 
 </script>
-
-
 </html>
