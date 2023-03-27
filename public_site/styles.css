@@ -10,11 +10,11 @@ body {
     margin-left: 2%;
     background-color: #04a7de;
     color:white;
-    cursor: url("paint-brush.png"), auto;
 }
 
 #canvas {
   background-color: #fffcf8;
+  cursor: url("paint-brush.png"), auto;
 }
 
 h3,h4 {
@@ -48,6 +48,7 @@ h4#percentage {
     margin-right:20px;
     align-items: center;
     justify-content: center;
+    cursor: url("paint-brush.png"), auto;
 }
 
 .canvas {
@@ -78,9 +79,9 @@ h4#percentage {
     flex-shrink: 1;
 }
 
-.icon:hover {
+/* .icon:hover {
     cursor: pointer;
-}
+} */
 
 .iconButton {
     /* margin:5px; */
@@ -163,7 +164,7 @@ color:rgb(83, 29, 73)
   /* The slider */
   .slider {
     position: absolute;
-    cursor: pointer;
+    /* cursor: pointer; */
     top: 0;
     left: 0;
     right: 0;

@@ -14,7 +14,7 @@
 
     <!-- Referenced: https://www.w3schools.com/howto/howto_css_switch.asp -->
 
-    <svg id="bubbles" height="250" width="100%"></svg>
+    <svg id="bubbles" height="300" width="100%"></svg>
 
     <div class="container">
 
@@ -93,7 +93,7 @@
 
 
         const bubbleExtent = d3.extent(d3.map(bob_ross_counts, d => d.count));
-        const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([15, 30]);
+        const bubbleScale = d3.scaleLinear().domain(bubbleExtent).range([20, 40]);
         // const elementScale = d3.scalePoint().domain(d3.map(bob_ross_counts, d => d.element)).range([50, 300]);
         var bubblecolorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.map(bob_ross_counts, d => d.element))
 
@@ -103,12 +103,76 @@
             .data(bob_ross_counts)
             .join("g")
             .attr("id", "bubble")
-            .attr("transform", `translate(${0},${-bubblesHeight / 3})`)
+            .attr("transform", `translate(${0},${-bubblesHeight / 4})`)
             .on("click", selectBubble);
 
-        function selectBubble(){
+            
 
-          
+        // store this info to move the previous bubble back
+        var prevBubble = { x: 0, y: 0, rad: 0 };
+        var prevBub = null; // use this to move it back
+        var prevBubR = null; // use this shrink back
+
+        var prevblabel = null;
+        var prevblabel_percent = null;
+
+        function selectBubble() {
+            // bubble info
+            label = d3.select(this).datum().element
+            console.log(d3.select(this).datum())
+            filteredBubble = packedbubble._groups[0].filter(d => d3.select(d).data()[0].element === label)
+
+            console.log('filteredBubble', filteredBubble)
+            fixedPosx = 1100
+            fixedPosy = 250 / 2
+
+            thisBubble = d3.select(filteredBubble[0])
+            console.log('thisBubble', thisBubble)
+
+            xpos = d3.select(filteredBubble[0]).datum().x
+            ypos = d3.select(filteredBubble[0]).datum().y
+            // rad = filteredBubble[0].firstChild.r
+            rad = bubbleScale(thisBubble.datum().count);
+            console.log('moveto', xpos, ypos)
+
+            // move bubble
+            thisBubble.transition().duration(400).attr("transform", `translate(${fixedPosx - xpos},${fixedPosy - ypos})`)
+            // increase radius
+            d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
+
+            thisblabel = d3.select(filteredBubble[0].children[1])
+            thisblabel.attr("transform", `translate(${0},${-10})`)
+
+            thisblabel_percent = d3.select(filteredBubble[0].children[2])
+            thisblabel_percent.attr("visibility", "visible")
+
+            // move bubble back
+            if (prevBub !== null) {
+                console.log('wow')
+                console.log(prevBubble)
+                prevBubR.transition().duration(600).attr("r", prevBubble.rad)
+                prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 4)})`)
+
+                // thisblabel = d3.select(filteredBubble[0].children[1])
+                prevblabel.attr("transform", `translate(${0},${0})`);
+
+                // thisblabel_percent = d3.select(filteredBubble[0].children[2])
+                prevblabel_percent.attr("visibility", "hidden");
+                // prevBub = null;
+            }
+
+            prevBubble.x = xpos;
+            prevBubble.y = ypos;
+            prevBubble.rad = rad;
+            prevBub = thisBubble;
+            prevBubR = d3.select(filteredBubble[0].children[0]);
+            prevblabel = d3.select(filteredBubble[0].children[1]);
+            prevblabel_percent = d3.select(filteredBubble[0].children[2]);
+            console.log('here')
+            console.log("p", prevBub)
+            console.log("t", thisBubble)
+
+
         }
         // .on('mouseover', mouseEntersBubble)
         // .on('mouseout', mouseLeavesBubble);
@@ -150,14 +214,14 @@
             .attr("stroke", "none")
             .style("stroke-width", 0)
             .attr('r', d => bubbleScale(d.count))
-        // .on("mouseover", function () {
-        //     thisBubble = d3.select(this);
-        //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count) + 10))
-        // })
-        // .on("mouseout", function () {
-        //     thisBubble = d3.select(this);
-        //     thisBubble.transition(100).attr("r", (bubbleScale(thisBubble.datum().count)))
-        // });
+        .on("mouseover", function () {
+            thisBubble = d3.select(this);
+            thisBubble.transition(40).style('stroke-width','5px').style("stroke","#efdf8d").style('stroke-opacity',.8).style('cursor','pointer')
+        })
+        .on("mouseout", function () {
+            thisBubble = d3.select(this);
+            thisBubble.transition(40).style('stroke-width','0px')
+        });
 
 
 
@@ -421,15 +485,6 @@
 
         }
 
-        // store this info to move the previous bubble back
-        var prevBubble = { x: 0, y: 0, rad: 0 };
-        var prevBub = null; // use this to move it back
-        var prevBubR = null; // use this shrink back
-
-        var prevblabel = null;
-        var prevblabel_percent = null;
-
-
         function iconClicked() {
 
 
@@ -463,69 +518,15 @@
             buttonClickedIndex = selectedLabels.indexOf(buttonClicked)
 
 
-            // bubble info
-            filteredBubble = packedbubble._groups[0].filter(d => d3.select(d).data()[0].element === buttonClicked)
-            console.log('filteredBubble', filteredBubble)
-            fixedPosx = 1100
-            fixedPosy = 250 / 2
-
-            thisBubble = d3.select(filteredBubble[0])
-            console.log('thisBubble', thisBubble)
-
-            xpos = d3.select(filteredBubble[0]).datum().x
-            ypos = d3.select(filteredBubble[0]).datum().y
-            // rad = filteredBubble[0].firstChild.r
-            rad = bubbleScale(thisBubble.datum().count);
-
             // dec radius
             // d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", prevBubble.rad)
-
-            // move bubble back
-            if (prevBub !== null) {
-                console.log('wow')
-                console.log(prevBubble)
-                prevBubR.transition().duration(600).attr("r", prevBubble.rad)
-                prevBub.transition().duration(400).attr("transform", `translate(${(0)},${(-bubblesHeight / 3)})`)
-
-                // thisblabel = d3.select(filteredBubble[0].children[1])
-                prevblabel.attr("transform", `translate(${0},${0})`);
-
-                // thisblabel_percent = d3.select(filteredBubble[0].children[2])
-
-                prevblabel_percent.attr("visibility", "hidden");
-
-            }
 
 
             // if button is not in the selectedLabels, add it to the array
             if (buttonClickedIndex == -1) {
                 selectedLabels.push(buttonClicked);
 
-                // move bubble
-                thisBubble.transition().duration(400).attr("transform", `translate(${fixedPosx - xpos},${fixedPosy - ypos})`)
-                // increase radius
-                d3.select(filteredBubble[0].children[0]).transition().duration(600).attr("r", 100)
-
-                thisblabel = d3.select(filteredBubble[0].children[1])
-                thisblabel.attr("transform", `translate(${0},${-10})`)
-
-                thisblabel_percent = d3.select(filteredBubble[0].children[2])
-
-                thisblabel_percent.attr("visibility", "visible")
-
-
-
                 // save bubble info, to move it back
-
-                prevBubble.x = xpos;
-                prevBubble.y = ypos;
-                prevBubble.rad = rad;
-                prevBub = thisBubble;
-                prevBubR = d3.select(filteredBubble[0].children[0]);
-
-                prevblabel = d3.select(filteredBubble[0].children[1]);
-
-                prevblabel_percent = d3.select(filteredBubble[0].children[2]);
 
             }
             // if it is not in selectedLabels, remove it from the array
